@@ -1,13 +1,17 @@
 // D:\cnpm\my-defi-app/src/App.tsx
 
 import React from 'react';
-// ĐẢM BẢO CÁC IMPORTS NÀY ĐÃ ĐƯỢC THÊM:
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; 
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
+// Components
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
-import FeaturesSection from './components/FeaturesSection'; // Cần thiết cho Trang chủ
-import TradeView from './views/TradeView'; // Cần thiết cho Trang 2
+import FeaturesSection from './components/FeaturesSection';
+
+// Views
+import TradeView from './view/TradeView';
+import EarnView from './view/EarnView';
+import BuyCryptoView from './view/BuyCryptoView';
 
 // Web3 & React Query
 import { WagmiProvider } from 'wagmi';
@@ -18,39 +22,42 @@ const App: React.FC = () => {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        {/* Đảm bảo Router bao bọc toàn bộ ứng dụng */}
-        <Router> 
+        <Router>
           <div className="min-h-screen bg-defi-bg text-white">
-            <Header /> {/* Header sẽ luôn hiển thị */}
+            <Header />
 
             <main>
-              {/* ROUTES MỚI */}
               <Routes>
-                {/* Trang 1: Trang chủ (/) - Gồm HeroSection và FeaturesSection */}
-                <Route 
-                  path="/" 
+                {/* Trang chủ */}
+                <Route
+                  path="/"
                   element={
                     <>
-                      <HeroSection /> 
+                      <HeroSection />
                       <FeaturesSection />
                     </>
-                  } 
+                  }
                 />
 
-                {/* Trang 2: Trang Giao dịch (/trade) */}
-                <Route 
-                  path="/trade" 
-                  element={<TradeView />} 
+                {/* Trang giao dịch */}
+                <Route path="/trade" element={<TradeView />} />
+
+                {/* Trang kiếm tiền */}
+                <Route path="/earn" element={<EarnView />} />
+
+                {/* Trang mua Crypto */}
+                <Route
+                  path="/buy-crypto"
+                  element={<BuyCryptoView />}
                 />
               </Routes>
             </main>
 
-            {/* Footer sẽ luôn hiển thị (Giữ nguyên) */}
             <footer className="bg-defi-header border-t border-defi-border py-5 mt-10 text-center">
-              {/* ... Nội dung footer ... */}
+              {/* Footer content */}
             </footer>
           </div>
-        </Router> 
+        </Router>
       </QueryClientProvider>
     </WagmiProvider>
   );

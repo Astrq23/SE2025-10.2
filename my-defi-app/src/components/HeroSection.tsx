@@ -1,6 +1,7 @@
 // D:\cnpm\my-defi-app/src/components/HeroSection.tsx
 
 import React from 'react';
+// KHÔNG CẦN import { Link } từ react-router-dom nữa vì đã xóa các nút Link
 import SwapBox from './SwapBox';
 import AppPagination from './AppPagination';
 
@@ -21,22 +22,21 @@ const HeroSection: React.FC = () => {
     <>
       <section style={{ padding: '80px 0 90px' }}>
         <div
+          // Sử dụng lớp CSS để quản lý responsive cho max-width, grid layout và gap
+          className="hero-section-layout"
           style={{
-            maxWidth: '1200px',
             margin: '0 auto',
             padding: '0 24px',
-            display: 'grid',
-            gridTemplateColumns: '1.1fr 0.9fr', // ⚠️ CÂN LẠI TỶ LỆ
+            // Các thuộc tính responsive đã chuyển sang HeroSection.css
             alignItems: 'center',
-            gap: '64px',
           }}
         >
           {/* CỘT TRÁI */}
-          <div>
+          <div className="hero-section-content">
             <h1
               style={{
                 color: '#facc15',
-                fontSize: '3rem',
+                fontSize: '3rem', // Có thể điều chỉnh bằng media query trong CSS
                 lineHeight: '1.2',
                 marginBottom: '24px',
               }}
@@ -45,10 +45,10 @@ const HeroSection: React.FC = () => {
             </h1>
 
             <p
+              className="hero-section-description"
               style={{
                 color: '#b8c0cc',
                 fontSize: '1.2rem',
-                maxWidth: '520px', // ⚠️ KHÓA CHIỀU RỘNG ĐỂ ĐẸP HƠN
                 marginBottom: '32px',
               }}
             >
@@ -56,14 +56,14 @@ const HeroSection: React.FC = () => {
               thanh khoản sâu và chi phí tối ưu.
             </p>
 
-            {/* Networks */}
+            {/* Networks - KHÔNG ĐỔI */}
             <div
               style={{
                 display: 'flex',
                 flexWrap: 'wrap',
                 gap: '12px',
                 marginBottom: '36px',
-                maxWidth: '560px',
+                maxWidth: '100%',
               }}
             >
               {SUPPORTED_NETWORKS.map((net) => (
@@ -88,7 +88,10 @@ const HeroSection: React.FC = () => {
                       height: '16px',
                       borderRadius: '50%',
                       backgroundColor: net.color,
-                      border: net.color === '#FFFFFF' ? '1px solid #64748b' : 'none',
+                      border:
+                        net.color === '#FFFFFF'
+                          ? '1px solid #64748b'
+                          : 'none',
                     }}
                   />
                   {net.symbol}
@@ -96,29 +99,14 @@ const HeroSection: React.FC = () => {
               ))}
             </div>
 
-            {/* CTA */}
-            <button
-              style={{
-                backgroundColor: '#4ade80',
-                color: '#1e293b',
-                fontWeight: 'bold',
-                padding: '14px 28px',
-                borderRadius: '14px',
-                fontSize: '1.1rem',
-                cursor: 'pointer',
-                border: 'none',
-                boxShadow: '0 6px 20px rgba(74, 222, 128, 0.35)',
-              }}
-            >
-              Khám phá Sàn Giao dịch
-            </button>
+            {/* CTA Buttons - ĐÃ XÓA HOÀN TOÀN CẢ HAI NÚT */}
           </div>
 
-          {/* CỘT PHẢI */}
+          {/* CỘT PHẢI - KHÔNG ĐỔI */}
           <div
             style={{
               display: 'flex',
-              justifyContent: 'center', // ⚠️ KHÔNG DÍNH MÉP PHẢI
+              justifyContent: 'center',
             }}
           >
             <SwapBox />
@@ -126,10 +114,10 @@ const HeroSection: React.FC = () => {
         </div>
       </section>
 
-      {/* Pagination căn cùng trục layout */}
+      {/* Pagination - KHÔNG ĐỔI */}
       <div
+        className="hero-section-pagination"
         style={{
-          maxWidth: '1200px',
           margin: '0 auto',
           padding: '0 24px 60px',
           display: 'flex',

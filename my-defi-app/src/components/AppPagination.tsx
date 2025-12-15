@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 const PAGES = [
   { id: 1, name: 'Trang chủ', path: '/' },
   { id: 2, name: 'Giao dịch', path: '/trade' },
+  { id: 3, name: 'Kiếm tiền', path: '/earn' },
   // Bạn có thể thêm { id: 3, name: 'Earn', path: '/earn' }, v.v.
 ];
 
