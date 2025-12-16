@@ -23,8 +23,8 @@ const NETWORKS = [
 const navLinks = [
   { name: 'Trade', href: '/trade', isHighlight: true },
   { name: 'Perps', href: '/trade', isHighlight: false },
+  { name: 'Tokens', href: '/tokens', isHighlight: false },
   { name: 'Earn', href: '/earn', isHighlight: false },
-  { name: 'Mint NFT', href: '/mint', isHighlight: false },
   { name: 'CAKEPAD', href: '#cakepad', isHighlight: false },
   { name: 'Play', href: '#play', isHighlight: false },
 ];
@@ -239,7 +239,7 @@ const Header: React.FC = () => {
                 border: isNetworkOpen ? '1px solid #7a6eec' : 'none',
               }}
             >
-              ⚙️ {currentNetwork} ⌄
+              ⚙️ {currentNetwork}
             </button>
 
             {isNetworkOpen && (
