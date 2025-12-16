@@ -12,6 +12,7 @@ import FeaturesSection from './components/FeaturesSection';
 import TradeView from './view/TradeView';
 import EarnView from './view/EarnView';
 import BuyCryptoView from './view/BuyCryptoView';
+import MintView from './view/MintView';
 
 // Web3 & React Query
 import { WagmiProvider } from 'wagmi';
@@ -50,6 +51,9 @@ const App: React.FC = () => {
                   path="/buy-crypto"
                   element={<BuyCryptoView />}
                 />
+
+                {/* Trang Mint NFT */}
+                <Route path="/mint" element={<MintView />} />
               </Routes>
             </main>
 

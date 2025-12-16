@@ -24,6 +24,7 @@ const navLinks = [
   { name: 'Trade', href: '/trade', isHighlight: true },
   { name: 'Perps', href: '/trade', isHighlight: false },
   { name: 'Earn', href: '/earn', isHighlight: false },
+  { name: 'Mint NFT', href: '/mint', isHighlight: false },
   { name: 'CAKEPAD', href: '#cakepad', isHighlight: false },
   { name: 'Play', href: '#play', isHighlight: false },
 ];
