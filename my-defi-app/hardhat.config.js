@@ -1,12 +1,13 @@
 // D:\cnpm\SE2025-10.2\hardhat.config.js - ĐÃ THÊM CẤU HÌNH PATHS
 
-import { config as dotenvConfig } from "dotenv";
-import { resolve } from "path";
-import "@nomicfoundation/hardhat-ignition-ethers";
-import "@nomicfoundation/hardhat-chai-matchers";
+const { config: dotenvConfig } = require("dotenv");
+const { resolve } = require("path");
+
+require("@nomicfoundation/hardhat-ignition-ethers");
+require("@nomicfoundation/hardhat-chai-matchers");
 
 const dotenvConfigPath = process.env.DOTENV_CONFIG_PATH || "../.env";
-dotenvConfig({ path: resolve(process.cwd(), dotenvConfigPath) });
+dotenvConfig({ path: resolve(__dirname, dotenvConfigPath) });
 
 const mnemonic = process.env.MNEMONIC || "";
 const privateKeys = process.env.PRIVATE_KEYS ? process.env.PRIVATE_KEYS.split(',') : []
