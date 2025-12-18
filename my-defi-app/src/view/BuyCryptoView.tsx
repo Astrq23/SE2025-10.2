@@ -10,7 +10,7 @@ const BuyCryptoView: React.FC = () => {
                 style={{
                     maxWidth: '1200px',
                     margin: '0 auto',
-                    padding: '60px 20px 80px',
+                    padding: '20px 20px 80px',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center', // Căn giữa BuyCryptoBox

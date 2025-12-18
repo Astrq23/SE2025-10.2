@@ -22,7 +22,7 @@ const NETWORKS = [
 // Navigation links
 const navLinks = [
   { name: 'Trade', href: '/trade', isHighlight: true },
-  { name: 'Perps', href: '/trade', isHighlight: false },
+  { name: 'MintNFT', href: '/mint', isHighlight: false },
   { name: 'Tokens', href: '/tokens', isHighlight: false },
   { name: 'Earn', href: '/earn', isHighlight: false },
   { name: 'CAKEPAD', href: '#cakepad', isHighlight: false },

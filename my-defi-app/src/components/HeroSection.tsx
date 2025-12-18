@@ -18,7 +18,7 @@ const SUPPORTED_NETWORKS: { symbol: string; color: string }[] = [
 const HeroSection: React.FC = () => {
   return (
     <>
-      <section style={{ padding: '100px 0 110px' }}>
+      <section style={{ padding: '20px 0 110px' }}>
         <div
           className="hero-section-layout"
           style={{

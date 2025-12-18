@@ -22,7 +22,7 @@ const TokenManagementView: React.FC = () => {
         style={{
           maxWidth: '1200px',
           margin: '0 auto',
-          padding: '60px 20px 80px',
+          padding: '20px 20px 80px',
         }}
       >
         {/* Tiêu đề */}
@@ -134,11 +134,20 @@ const TokenManagementView: React.FC = () => {
         </div>
       </div>
 
+      {/* Pagination */}
+      <div
+        style={{
+          margin: '0 auto',
+          padding: '0 20px 60px',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <AppPagination />
+      </div>
+
       {/* Features Section */}
       <FeaturesSection />
-
-      {/* Pagination */}
-      <AppPagination />
     </div>
   );
 };

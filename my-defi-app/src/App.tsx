@@ -13,6 +13,7 @@ import TradeView from './view/TradeView';
 import EarnView from './view/EarnView';
 import BuyCryptoView from './view/BuyCryptoView';
 import TokenManagementView from './view/TokenManagementView';
+import MintView from './view/MintView';
 
 // Web3 & React Query
 import { WagmiProvider } from 'wagmi';
@@ -42,6 +43,9 @@ const App: React.FC = () => {
 
                 {/* Trang giao dịch */}
                 <Route path="/trade" element={<TradeView />} />
+
+                {/* Trang Mint NFT */}
+                <Route path="/mint" element={<MintView />} />
 
                 {/* Trang kiếm tiền */}
                 <Route path="/earn" element={<EarnView />} />
