@@ -1,0 +1,24 @@
+{
+  "name": "inferix-token-contracts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.8",
+    "@nomicfoundation/hardhat-ethers": "^3.0.8",
+    "@nomicfoundation/hardhat-ignition": "^0.15.11",
+    "@nomicfoundation/hardhat-ignition-ethers": "^0.15.11",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.12",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.13",
+    "@nomicfoundation/ignition-core": "^0.15.11",
+    "@openzeppelin/contracts": "^5.0.2",
+    "@openzeppelin/merkle-tree": "^1.0.7",
+    "@typechain/ethers-v6": "^0.5.1",
+    "chai": "4",
+    "dotenv": "^16.6.1",
+    "hardhat": "^2.22.11",
+    "install": "^0.13.0",
+    "npm": "^10.8.3"
+  }
+}
