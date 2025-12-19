@@ -1,0 +1,41 @@
+/* D:\cnpm\my-defi-app/src/index.css (CHỈ CÒN GLOBAL STYLES) */
+
+/* 1. Reset và Style Toàn cục */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    background-color: #0b0f19; /* Màu nền tối */
+    color: white; 
+    min-height: 100vh;
+}
+
+#root {
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* 2. Style cho các thẻ a (Liên kết) - Cần thiết vì đã xóa Tailwind reset */
+a {
+    text-decoration: none;
+    color: #b8c0cc;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #7a6eec;
+}
+
+/* 3. STYLE CĂN GIỮA NỘI DUNG (Áp dụng cho Hero/Features) */
+.section-center-content {
+    text-align: center;
+    margin: 0 auto; /* Đảm bảo khối nằm giữa */
+    max-width: 900px; /* Giới hạn chiều rộng để văn bản không quá dài */
+}
+
+.main-heading {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
