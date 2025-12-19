@@ -1,4 +1,4 @@
-// D:\cnpm\SE2025-10.2\hardhat.config.js - ĐÃ THÊM CẤU HÌNH PATHS
+// D:\cnpm\SE2025-10.2\hardhat.config.js - ĐÃ THÊM CẤU HÌNH PATHS CHO VIỆC BIÊN DỊCH
 
 const { config: dotenvConfig } = require("dotenv");
 const { resolve } = require("path");
@@ -17,12 +17,8 @@ if (!mnemonic && !privateKeys.length) {
 
 
 /** @type import('hardhat/config').HardhatUserConfig */
-module.exports = {  paths: {
-    sources: "./my-defi-app/contracts",
-    tests: "./test",
-    cache: "./cache",
-    artifacts: "./artifacts"
-  },  networks: {
+module.exports = {
+  networks: {
     hardhat: {
     },
     iotextest: {
@@ -61,13 +57,13 @@ module.exports = {  paths: {
     }
   },
   // **********************************************
-  // ** CẤU HÌNH PATHS ĐÃ ĐƯỢC THÊM VÀO ĐÂY **
+  // ** CẤU HÌNH ĐƯỜNG DẪN CẦN THIẾT CHO CẤU TRÚC DỰ ÁN CỦA BẠN **
   // **********************************************
   paths: {
-    // Hardhat tìm file Solidity trong thư mục con 'my-defi-app/contracts'
+    // Hardhat sẽ tìm file Solidity trong thư mục con 'my-defi-app/contracts'
     sources: './my-defi-app/contracts', 
     
-    // Hardhat tạo file output (artifacts) trong thư mục con 'my-defi-app/artifacts'
+    // Hardhat sẽ tạo file output (artifacts) trong thư mục con 'my-defi-app/artifacts'
     artifacts: './my-defi-app/artifacts' 
   }
 };
