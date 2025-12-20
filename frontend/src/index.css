@@ -1,3 +1,5 @@
+/* src/index.css */
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -22,13 +24,17 @@ a:hover {
   color: #535bf2;
 }
 
+/* --- SỬA QUAN TRỌNG TẠI ĐÂY --- */
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  padding: 0;         /* Thêm vào cho chắc */
+  display: block;     /* Đổi từ flex sang block để nó tự trải dài */
+  width: 100%;        /* Chiếm hết chiều rộng */
   min-width: 320px;
   min-height: 100vh;
+  /* Đã xóa: place-items: center */
 }
+/* ------------------------------- */
 
 h1 {
   font-size: 3.2em;

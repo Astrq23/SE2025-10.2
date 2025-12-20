@@ -1,9 +1,14 @@
+/* src/App.css */
+
+/* --- SỬA ĐOẠN NÀY --- */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100%;        /* Chiếm toàn bộ chiều rộng */
+  max-width: 100%;    /* Bỏ giới hạn 1280px cũ */
+  margin: 0;          /* Bỏ căn giữa */
+  padding: 0;         /* Bỏ padding thừa 2rem */
+  text-align: left;   /* Đưa text về căn trái mặc định (thay vì center) */
 }
+/* -------------------- */
 
 .logo {
   height: 6em;
