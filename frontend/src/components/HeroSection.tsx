@@ -54,11 +54,11 @@ const HeroSection: React.FC = () => {
                 textShadow: '0px 10px 20px rgba(250, 204, 21, 0.2)', 
               }}
             >
-              Các lựa chọn hàng đầu
+              Top Choices
             </h2>
 
             <p style={{ fontSize: '1.25rem', color: '#94a3b8', marginBottom: '40px', maxWidth: '600px' }}>
-                Trải nghiệm giao dịch phi tập trung tối ưu với tốc độ siêu nhanh và chi phí cực thấp trên đa nền tảng.
+                Experience optimal decentralized trading with lightning-fast speeds and ultra-low costs across multiple platforms.
             </p>
 
             {/* Networks */}

@@ -12,7 +12,7 @@ import HeroSection from './components/HeroSection';
 import FeaturesSection from './components/FeaturesSection';
 
 // Import Views (Đã copy từ my-defi-app)
-import TradeView from './view/TradeView';
+import TradeView from './view/TradeChartView';
 import MintView from './view/MintView';
 // Các view khác nếu có
 import EarnView from './view/EarnView';

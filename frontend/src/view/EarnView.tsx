@@ -13,11 +13,11 @@ const TradeView: React.FC = () => {
         }}
       >
         <h1 style={{ color: '#4ade80', fontSize: '2.5rem', marginBottom: '20px' }}>
-          Kiếm Tiền DeFi Nâng Cao
+          Advanced DeFi Earning
         </h1>
 
         <p style={{ color: '#b8c0cc', fontSize: '1.25rem', marginBottom: '40px' }}>
-          Kiếm lợi nhuận thụ động với các pool staking, farming và lending cao APY trên nhiều blockchain.
+          Earn passive income with staking pools, farming, and lending at high APY across multiple blockchains.
         </p>
 
         {/* Phần tính năng nổi bật */}

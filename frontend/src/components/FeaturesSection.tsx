@@ -10,33 +10,33 @@ const FeaturesSection: React.FC = () => {
   const features: Feature[] = [
     {
       icon: '⚡',
-      title: 'Giao dịch nhanh',
-      description: 'Thực hiện giao dịch với tốc độ cao trên nhiều chuỗi blockchain hàng đầu.',
+      title: 'Fast Transactions',
+      description: 'Execute trades at high speed across leading blockchain networks.',
     },
     {
       icon: '💰',
-      title: 'Phí thấp',
-      description: 'Tận hưởng những khoản phí giao dịch cạnh tranh nhất trong ngành.',
+      title: 'Low Fees',
+      description: 'Enjoy the most competitive trading fees in the industry.',
     },
     {
       icon: '🔒',
-      title: 'Bảo mật cao',
-      description: 'Ví của bạn luôn được bảo vệ với các tiêu chuẩn bảo mật hàng đầu.',
+      title: 'High Security',
+      description: 'Your wallet is always protected with industry-leading security standards.',
     },
     {
       icon: '🌐',
-      title: 'Đa chuỗi',
-      description: 'Hỗ trợ giao dịch trên Ethereum, BNB Chain, Solana, Arbitrum, v.v.',
+      title: 'Multi-Chain',
+      description: 'Support for trading on Ethereum, BNB Chain, Solana, Arbitrum, and more.',
     },
     {
       icon: '📊',
-      title: 'Công cụ chuyên nghiệp',
-      description: 'Truy cập các biểu đồ nâng cao, sổ lệnh thực tế và phân tích chuyên sâu.',
+      title: 'Professional Tools',
+      description: 'Access advanced charts, real-time order books, and in-depth analytics.',
     },
     {
       icon: '🚀',
       title: 'Yield Farming',
-      description: 'Kiếm phần thưởng thông qua cung cấp thanh khoản và staking token.',
+      description: 'Earn rewards by providing liquidity and staking tokens.',
     },
   ];
 
@@ -59,7 +59,7 @@ const FeaturesSection: React.FC = () => {
             marginBottom: '16px',
             fontWeight: 'bold'
           }}>
-            Tại sao chọn DeFi DEX?
+            Why Choose DeFi DEX?
           </h2>
           <p style={{
             color: '#b8c0cc',
@@ -67,7 +67,7 @@ const FeaturesSection: React.FC = () => {
             maxWidth: '600px',
             margin: '0 auto'
           }}>
-            Nền tảng giao dịch DeFi toàn diện với hiệu suất cao, bảo mật tuyệt vời và trải nghiệm người dùng tuyệt vời.
+            A comprehensive DeFi trading platform with high performance, excellent security, and outstanding user experience.
           </p>
         </div>
 
@@ -155,7 +155,7 @@ const FeaturesSection: React.FC = () => {
               $500M+
             </div>
             <div style={{ color: '#b8c0cc' }}>
-              Tổng thanh khoản
+              Total Liquidity
             </div>
           </div>
 
@@ -169,7 +169,7 @@ const FeaturesSection: React.FC = () => {
               12+
             </div>
             <div style={{ color: '#b8c0cc' }}>
-              Chuỗi được hỗ trợ
+              Supported Chains
             </div>
           </div>
 
@@ -183,7 +183,7 @@ const FeaturesSection: React.FC = () => {
               1M+
             </div>
             <div style={{ color: '#b8c0cc' }}>
-              Người dùng hoạt động
+              Active Users
             </div>
           </div>
 
@@ -197,7 +197,7 @@ const FeaturesSection: React.FC = () => {
               0.1%
             </div>
             <div style={{ color: '#b8c0cc' }}>
-              Phí giao dịch thấp
+              Low Trading Fees
             </div>
           </div>
         </div>

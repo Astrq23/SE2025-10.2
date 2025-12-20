@@ -5,7 +5,7 @@ import WalletLogin from './WalletLogin';
 import TradeDropdown from './TradeDropdown';
 import './Header.css';
 
-// Danh sách các mạng lưới
+// List of networks
 const NETWORKS = [
   { name: 'BNB Chain', icon: '💰', color: '#f0b90b' },
   { name: 'Ethereum', icon: '💎', color: '#627EEA' },
@@ -23,8 +23,6 @@ const navLinks = [
   { name: 'MintNFT', href: '/mint', isHighlight: false },
   { name: 'Tokens', href: '/tokens', isHighlight: false },
   { name: 'Earn', href: '/earn', isHighlight: false },
-  { name: 'CAKEPAD', href: '#cakepad', isHighlight: false },
-  { name: 'Play', href: '#play', isHighlight: false },
 ];
 
 const Header: React.FC = () => {
@@ -32,24 +30,24 @@ const Header: React.FC = () => {
   const [isNetworkOpen, setIsNetworkOpen] = useState(false);
   const [isTradeDropdownOpen, setIsTradeDropdownOpen] = useState(false);
 
-  // Refs để xử lý đóng dropdown khi click ra ngoài
+  // Refs to handle closing dropdown when clicking outside
   const tradeRef = React.useRef<HTMLDivElement>(null);
   const networkRef = React.useRef<HTMLDivElement>(null);
 
-  // Hàm xử lý Click (Toggle) cho nút Trade
+  // Handle Click (Toggle) for Trade button
   const handleTradeClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsTradeDropdownOpen((prev) => !prev);
     setIsNetworkOpen(false);
   };
 
-  // Hàm xử lý Click (Toggle) cho nút Network
+  // Handle Click (Toggle) for Network button
   const handleNetworkClick = () => {
     setIsNetworkOpen((prev) => !prev);
     setIsTradeDropdownOpen(false);
   };
 
-  // Logic đóng dropdown khi click ra ngoài
+  // Logic to close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (tradeRef.current && !tradeRef.current.contains(event.target as Node)) {
@@ -65,13 +63,13 @@ const Header: React.FC = () => {
     };
   }, []);
 
-  // Hàm xử lý Click cho các nút vô hiệu hóa
+  // Handle click for disabled links
   const handleDisabledLinkClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    console.log(`Tính năng ${e.currentTarget.textContent} đang được phát triển.`);
+    console.log(`Feature ${e.currentTarget.textContent} is under development.`);
   };
 
-  // Styles cho Network Dropdown
+  // Styles for Network Dropdown
   const networkDropdownStyle: React.CSSProperties = {
     position: 'absolute',
     top: '100%',
@@ -101,10 +99,10 @@ const Header: React.FC = () => {
       <div 
         className="header-inner" 
         style={{ 
-          width: '100%',          // Full chiều rộng
-          maxWidth: '100%',       // Bỏ giới hạn pixel
+          width: '100%',          // Full width
+          maxWidth: '100%',       // No pixel limit
           margin: '0',
-          padding: '0 30px',      // Padding 2 bên cho thoáng
+          padding: '0 30px',      // Padding on both sides
           display: 'flex', 
           justifyContent: 'space-between', 
           alignItems: 'center',
@@ -112,7 +110,7 @@ const Header: React.FC = () => {
           boxSizing: 'border-box'
         }}
       >
-        {/* 1. Logo & Tên (Bên trái) */}
+        {/* 1. Logo & Name (Left) */}
         <Link to="/" style={{ textDecoration: 'none' }}>
           <div className="header-logo-container" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
             <span role="img" aria-label="DeFi Logo" style={{ fontSize: '32px', marginRight: '8px', color: '#facc15' }}>🥞</span>
@@ -120,7 +118,7 @@ const Header: React.FC = () => {
           </div>
         </Link>
 
-        {/* 2. Navigation (Căn giữa) */}
+        {/* 2. Navigation (Center) */}
         <nav className="nav-link-container" style={{ display: 'flex', justifyContent: 'center', gap: '15px' }}>
           {navLinks.map((link) => {
             const isTradeButton = link.name === 'Trade';
@@ -154,7 +152,7 @@ const Header: React.FC = () => {
           <button className="nav-link" style={{ padding: '8px' }}>•••</button>
         </nav>
 
-        {/* 3. Wallet & Network (Bên phải) */}
+        {/* 3. Wallet & Network (Right) */}
         <div className="header-wallet-controls" style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div ref={networkRef} style={{ position: 'relative' }}>
             <button
