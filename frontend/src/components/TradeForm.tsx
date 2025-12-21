@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 const TradeForm: React.FC = () => {
-    // State để theo dõi loại lệnh đang chọn (Buy/Sell)
+    // State to track order type (Buy/Sell)
     const [orderType, setOrderType] = useState<'buy' | 'sell'>('buy');
     
-    // Đặt lệnh: Giá và Số lượng
+    // Order inputs: Price and Amount
     const [price, setPrice] = useState('0.00');
     const [amount, setAmount] = useState('0.00');
 
@@ -13,17 +13,17 @@ const TradeForm: React.FC = () => {
     return (
         <div style={{ backgroundColor: '#1e293b', padding: '20px', borderRadius: '16px', border: '1px solid #334155' }}>
             <h3 style={{ color: '#ffffff', fontSize: '1.5rem', marginBottom: '15px' }}>
-                Đặt Lệnh {isBuy ? 'Mua' : 'Bán'}
+                Place {isBuy ? 'Buy' : 'Sell'} Order
             </h3>
             
-            {/* 1. Nút chọn Buy/Sell */}
+            {/* 1. Buy/Sell Toggle Buttons */}
             <div style={{ display: 'flex', marginBottom: '20px' }}>
                 <button 
                     onClick={() => setOrderType('buy')}
                     style={{ 
                         flex: 1, 
                         padding: '10px', 
-                        backgroundColor: isBuy ? '#16a34a' : '#2d3748', // Xanh lá đậm khi chọn
+                        backgroundColor: isBuy ? '#16a34a' : '#2d3748', // Dark green when selected
                         color: 'white', 
                         fontWeight: 'bold', 
                         border: 'none', 
@@ -31,14 +31,14 @@ const TradeForm: React.FC = () => {
                         cursor: 'pointer'
                     }}
                 >
-                    Mua
+                    Buy
                 </button>
                 <button 
                     onClick={() => setOrderType('sell')}
                     style={{ 
                         flex: 1, 
                         padding: '10px', 
-                        backgroundColor: isBuy ? '#2d3748' : '#dc2626', // Đỏ đậm khi chọn
+                        backgroundColor: isBuy ? '#2d3748' : '#dc2626', // Dark red when selected
                         color: 'white', 
                         fontWeight: 'bold', 
                         border: 'none', 
@@ -46,12 +46,12 @@ const TradeForm: React.FC = () => {
                         cursor: 'pointer'
                     }}
                 >
-                    Bán
+                    Sell
                 </button>
             </div>
 
-            {/* 2. Input Giá (Limit Order) */}
-            <label style={{ color: '#b8c0cc', display: 'block', marginBottom: '5px' }}>Giá BTC (Limit)</label>
+            {/* 2. Price Input (Limit Order) */}
+            <label style={{ color: '#b8c0cc', display: 'block', marginBottom: '5px' }}>BTC Price (Limit)</label>
             <input
                 type="number"
                 value={price}
@@ -60,8 +60,8 @@ const TradeForm: React.FC = () => {
                 style={inputStyle}
             />
             
-            {/* 3. Input Số lượng */}
-            <label style={{ color: '#b8c0cc', display: 'block', marginBottom: '5px', marginTop: '15px' }}>Số lượng BTC</label>
+            {/* 3. Amount Input */}
+            <label style={{ color: '#b8c0cc', display: 'block', marginBottom: '5px', marginTop: '15px' }}>BTC Amount</label>
             <input
                 type="number"
                 value={amount}
@@ -70,12 +70,12 @@ const TradeForm: React.FC = () => {
                 style={inputStyle}
             />
 
-            {/* 4. Tổng cộng */}
+            {/* 4. Total */}
             <div style={{ color: '#b8c0cc', marginTop: '20px', fontSize: '1.1rem', paddingBottom: '20px', borderBottom: '1px solid #334155' }}>
-                Tổng cộng: **{(parseFloat(price) * parseFloat(amount)).toFixed(2)}** USDT
+                Total: **{(parseFloat(price) * parseFloat(amount)).toFixed(2)}** USDT
             </div>
 
-            {/* 5. Nút Xác nhận */}
+            {/* 5. Confirm Button */}
             <button
                 style={{
                     width: '100%',
@@ -90,13 +90,13 @@ const TradeForm: React.FC = () => {
                     cursor: 'pointer'
                 }}
             >
-                {isBuy ? 'Xác nhận Mua' : 'Xác nhận Bán'} BTC
+                {isBuy ? 'Confirm Buy' : 'Confirm Sell'} BTC
             </button>
         </div>
     );
 };
 
-// Style dùng chung cho Input
+// Shared Input Style
 const inputStyle: React.CSSProperties = {
     width: '100%',
     padding: '10px 15px',

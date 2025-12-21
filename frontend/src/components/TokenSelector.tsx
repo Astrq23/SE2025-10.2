@@ -18,12 +18,11 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onTokenSelect, selectedTo
   const [customAddress, setCustomAddress] = useState('');
   const [isCustom, setIsCustom] = useState(false);
 
-  // Lấy danh sách token tương ứng với blockchain
+  // Get token list corresponding to the blockchain
   const getTokensForChain = (): TokenInfo[] => {
     const chainName = chain?.name;
     
-    // --- SỬA LỖI Ở ĐÂY ---
-    // Thay vì đòi `0x${string}`, ta chấp nhận `string` thường từ tokenUtils
+    // We accept normal string from tokenUtils initially
     let tokens: Record<string, string> = {}; 
 
     if (chainName?.includes('BSC') || chainName?.includes('BNB')) {
@@ -37,19 +36,18 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onTokenSelect, selectedTo
     return Object.entries(tokens).map(([symbol, address]) => ({
       name: symbol,
       symbol: symbol,
-      // --- VÀ ÉP KIỂU Ở ĐÂY ---
-      // Cam kết với TypeScript rằng address này chuẩn 0x
+      // Assert to TypeScript that this address is valid 0x
       address: address as `0x${string}`,
     }));
   };
 
   const handleCustomTokenAdd = () => {
-    // isValidAddress của bạn là Type Guard, nên nó tự hiểu đây là address xịn
+    // isValidAddress is a Type Guard, checks if address is valid
     if (!isValidAddress(customAddress)) {
-      alert('Địa chỉ không hợp lệ');
+      alert('Invalid address');
       return;
     }
-    // Vì isValidAddress đã kiểm tra, ta yên tâm ép kiểu
+    // Since isValidAddress checked it, we can safely cast
     onTokenSelect(customAddress as `0x${string}`);
     setCustomAddress('');
     setIsCustom(false);
@@ -66,14 +64,14 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onTokenSelect, selectedTo
         padding: '20px',
       }}
     >
-      <h3 style={{ color: '#ffffff', marginBottom: '15px' }}>Chọn Token</h3>
+      <h3 style={{ color: '#ffffff', marginBottom: '15px' }}>Select Token</h3>
 
-      {/* Danh sách token phổ biến */}
+      {/* Popular Tokens List */}
       {!isCustom && (
         <>
           <div style={{ marginBottom: '15px' }}>
             <p style={{ color: '#b8c0cc', fontSize: '0.85rem', marginBottom: '10px' }}>
-              Token phổ biến trên {chain?.name || 'blockchain'}
+              Popular tokens on {chain?.name || 'blockchain'}
             </p>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -116,7 +114,7 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onTokenSelect, selectedTo
             </div>
           </div>
 
-          {/* Nút thêm token tùy chỉnh */}
+          {/* Add Custom Token Button */}
           <button
             onClick={() => setIsCustom(true)}
             style={{
@@ -131,12 +129,12 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onTokenSelect, selectedTo
               marginTop: '10px',
             }}
           >
-            + Thêm Token Tùy Chỉnh
+            + Add Custom Token
           </button>
         </>
       )}
 
-      {/* Form thêm token tùy chỉnh */}
+      {/* Custom Token Form */}
       {isCustom && (
         <div
           style={{
@@ -147,7 +145,7 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onTokenSelect, selectedTo
           }}
         >
           <label style={{ color: '#b8c0cc', display: 'block', marginBottom: '5px' }}>
-            Địa chỉ Token
+            Token Address
           </label>
           <input
             type="text"
@@ -180,7 +178,7 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onTokenSelect, selectedTo
                 fontWeight: 'bold',
               }}
             >
-              Thêm
+              Add
             </button>
             <button
               onClick={() => {
@@ -198,7 +196,7 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onTokenSelect, selectedTo
                 fontWeight: 'bold',
               }}
             >
-              Hủy
+              Cancel
             </button>
           </div>
         </div>

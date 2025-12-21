@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# --- THÊM DÒNG NÀY ĐỂ CHẶN ENV ---
+.env

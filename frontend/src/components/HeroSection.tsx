@@ -1,23 +1,24 @@
-// D:\cnpm\my-defi-app/src/components/HeroSection.tsx
+// src/components/HeroSection.tsx
 
 import React from 'react';
-import SwapBox from './SwapBox';
+import ConvertBox from './ConvertBox'; 
 import AppPagination from './AppPagination';
 
-const SUPPORTED_NETWORKS: { symbol: string; color: string }[] = [
-  { symbol: 'ETH', color: '#627EEA' },
-  { symbol: 'BNB', color: '#F3BA2F' },
-  { symbol: 'BASE', color: '#0052FF' },
-  { symbol: 'ARB', color: '#28A0F0' },
-  { symbol: 'ZKS', color: '#8C8DFC' },
-  { symbol: 'LINEA', color: '#FFFFFF' },
-  { symbol: 'APT', color: '#000000' },
-  { symbol: 'opBNB', color: '#FFCC00' },
+// Network list with actual Logo Links
+const SUPPORTED_NETWORKS: { symbol: string; logo: string }[] = [
+  { symbol: 'ETH', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025' },
+  { symbol: 'BNB', logo: 'https://cryptologos.cc/logos/bnb-bnb-logo.png?v=025' },
+  { symbol: 'BASE', logo: 'https://cryptologos.cc/logos/base-base-logo.png?v=025' },
+  { symbol: 'ARB', logo: 'https://cryptologos.cc/logos/arbitrum-arb-logo.png?v=025' },
+  { symbol: 'ZKS', logo: 'https://cryptologos.cc/logos/zksync-zks-logo.png?v=025' },
+  { symbol: 'LINEA', logo: 'https://cryptologos.cc/logos/linea-linea-logo.png?v=025' },
+  { symbol: 'APT', logo: 'https://cryptologos.cc/logos/aptos-apt-logo.png?v=025' },
+  { symbol: 'opBNB', logo: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/opbnb/info/logo.png' },
 ];
 
 const HeroSection: React.FC = () => {
   return (
-    // Container bao ngoài
+    // Outer Container
     <div style={{ width: '100%', boxSizing: 'border-box' }}>
       
       <section style={{ padding: '40px 0 80px', width: '100%' }}>
@@ -27,25 +28,23 @@ const HeroSection: React.FC = () => {
             width: '100%',           
             maxWidth: '100%',       
             margin: '0',
-            // --- CẬP NHẬT PADDING % CHO ĐỒNG BỘ ---
-            padding: '0 6%',         // Padding trái phải 6%
-            // --------------------------------------
+            padding: '0 6%',         // Spacious padding (6%)
             boxSizing: 'border-box',
             display: 'grid',
-            // Grid thông minh: Màn to chia 2 cột, màn nhỏ tự xuống dòng
+            // Responsive Grid: 2 columns on large screens, 1 on small
             gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))',
-            gap: '60px',             // Tăng khoảng cách giữa 2 cột
+            gap: '60px',
             alignItems: 'center',
           }}
         >
-          {/* CỘT TRÁI - Quảng cáo */}
+          {/* LEFT COLUMN - Intro Content */}
           <div className="hero-section-content" style={{ textAlign: 'left' }}>
             <h2
               style={{
-                fontSize: 'clamp(3rem, 5vw, 4.5rem)', // Font chữ tự co giãn theo màn hình
+                fontSize: 'clamp(3rem, 5vw, 4.5rem)', // Responsive font size
                 fontWeight: '900',  
                 lineHeight: '1.1',
-                marginBottom: '40px',
+                marginBottom: '30px',
                 fontFamily: '"Exo 2", "Inter", sans-serif', 
                 letterSpacing: '-2px',
                 background: 'linear-gradient(90deg, #facc15 0%, #f97316 100%)', 
@@ -57,11 +56,11 @@ const HeroSection: React.FC = () => {
               Top Choices
             </h2>
 
-            <p style={{ fontSize: '1.25rem', color: '#94a3b8', marginBottom: '40px', maxWidth: '600px' }}>
-                Experience optimal decentralized trading with lightning-fast speeds and ultra-low costs across multiple platforms.
+            <p style={{ fontSize: '1.25rem', color: '#94a3b8', marginBottom: '40px', maxWidth: '600px', lineHeight: '1.6' }}>
+                Experience optimal decentralized trading with lightning-fast speeds, ultra-low costs, and multi-chain support.
             </p>
 
-            {/* Networks */}
+            {/* Network List (With Real Logos) */}
             <div
               style={{
                 display: 'flex',
@@ -74,28 +73,43 @@ const HeroSection: React.FC = () => {
                 <div
                   key={net.symbol}
                   style={{
-                    padding: '12px 20px',
-                    backgroundColor: 'rgba(30, 41, 59, 0.7)',
+                    padding: '10px 18px',
+                    backgroundColor: 'rgba(30, 41, 59, 0.7)', // Glassmorphism bg
                     backdropFilter: 'blur(10px)', 
                     border: '1px solid rgba(51, 65, 85, 0.5)',
                     borderRadius: '12px',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '10px',
-                    color: '#ffffff',
+                    gap: '12px',
+                    color: '#e2e8f0',
                     fontWeight: 700,
                     fontSize: '1rem',
                     transition: 'all 0.3s ease',
-                    cursor: 'default'
+                    cursor: 'default',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#facc15';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(51, 65, 85, 0.5)';
+                    e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
-                  <div
+                  {/* Logo Image */}
+                  <img 
+                    src={net.logo} 
+                    alt={net.symbol}
                     style={{
-                      width: '18px',
-                      height: '18px',
-                      borderRadius: '50%',
-                      backgroundColor: net.color,
-                      boxShadow: `0 0 10px ${net.color}80`, 
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50%', // Round logo
+                        objectFit: 'contain' 
+                    }} 
+                    onError={(e) => {
+                        // Fallback if image fails
+                        e.currentTarget.style.display = 'none';
                     }}
                   />
                   {net.symbol}
@@ -104,16 +118,16 @@ const HeroSection: React.FC = () => {
             </div>
           </div>
 
-          {/* CỘT PHẢI - SwapBox */}
+          {/* RIGHT COLUMN - Convert Box */}
           <div
             style={{
               display: 'flex',
-              justifyContent: 'center', // Căn giữa Swapbox trong cột của nó
+              justifyContent: 'center',
               position: 'relative',
               width: '100%'
             }}
           >
-            {/* Lớp nền phát sáng */}
+            {/* Glow Effect Background */}
             <div style={{
               position: 'absolute',
               top: '50%',
@@ -128,7 +142,7 @@ const HeroSection: React.FC = () => {
             }}></div>
             
             <div style={{ zIndex: 1, width: '100%', maxWidth: '480px' }}>
-              <SwapBox />
+              <ConvertBox />
             </div>
           </div>
         </div>

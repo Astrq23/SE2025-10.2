@@ -2,7 +2,7 @@ import React from 'react';
 import AppPagination from '../components/AppPagination';
 import FeaturesSection from '../components/FeaturesSection';
 
-const TradeView: React.FC = () => {
+const EarnView: React.FC = () => {
   return (
     <div className="min-h-screen bg-defi-bg text-white">
       <div
@@ -20,7 +20,7 @@ const TradeView: React.FC = () => {
           Earn passive income with staking pools, farming, and lending at high APY across multiple blockchains.
         </p>
 
-        {/* Phần tính năng nổi bật */}
+        {/* Feature Highlights */}
         <div style={{ marginBottom: '40px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
             <div style={{
@@ -33,7 +33,7 @@ const TradeView: React.FC = () => {
             }}>
               <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>🌾</div>
               <h3 style={{ color: '#facc15', fontSize: '1.2rem', marginBottom: '8px' }}>Yield Farming</h3>
-              <p style={{ color: '#b8c0cc', fontSize: '0.9rem' }}>Stake LP tokens để nhận farming rewards</p>
+              <p style={{ color: '#b8c0cc', fontSize: '0.9rem' }}>Stake LP tokens to earn farming rewards</p>
             </div>
             <div style={{
               padding: '24px',
@@ -45,7 +45,7 @@ const TradeView: React.FC = () => {
             }}>
               <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>🏦</div>
               <h3 style={{ color: '#facc15', fontSize: '1.2rem', marginBottom: '8px' }}>Lending</h3>
-              <p style={{ color: '#b8c0cc', fontSize: '0.9rem' }}>Cho vay crypto để nhận lãi suất hấp dẫn</p>
+              <p style={{ color: '#b8c0cc', fontSize: '0.9rem' }}>Lend crypto to earn attractive interest rates</p>
             </div>
             <div style={{
               padding: '24px',
@@ -57,7 +57,7 @@ const TradeView: React.FC = () => {
             }}>
               <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>💰</div>
               <h3 style={{ color: '#facc15', fontSize: '1.2rem', marginBottom: '8px' }}>Liquid Staking</h3>
-              <p style={{ color: '#b8c0cc', fontSize: '0.9rem' }}>Stake tokens và nhận liquid staking derivatives</p>
+              <p style={{ color: '#b8c0cc', fontSize: '0.9rem' }}>Stake tokens and receive liquid derivatives</p>
             </div>
           </div>
         </div>
@@ -205,7 +205,7 @@ const TradeView: React.FC = () => {
           </div>
         </div>
 
-        {/* Phần thống kê */}
+        {/* Stats Section */}
         <div style={{ marginTop: '40px', marginBottom: '20px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px' }}>
             <div style={{
@@ -273,4 +273,4 @@ const TradeView: React.FC = () => {
   );
 };
 
-export default TradeView;
+export default EarnView;

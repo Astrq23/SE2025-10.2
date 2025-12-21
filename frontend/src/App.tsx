@@ -1,20 +1,26 @@
+// src/App.tsx
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { WagmiProvider } from 'wagmi';
 import { QueryClientProvider } from '@tanstack/react-query';
 
-// Cần đảm bảo bạn đã copy file wagmi.tsx vào frontend/src
+// --- 1. IMPORT TOASTIFY ---
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+// Import Config
 import { config, queryClient } from './wagmi';
 
-// Import Components (Đã copy từ my-defi-app)
+// Import Components
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import FeaturesSection from './components/FeaturesSection';
+import Footer from './components/Footer'; // <--- IMPORT FOOTER MỚI
 
-// Import Views (Đã copy từ my-defi-app)
-import TradeView from './view/TradeChartView';
+// Import Views
+import TradeView from './view/TradeChartView'; 
 import MintView from './view/MintView';
-// Các view khác nếu có
 import EarnView from './view/EarnView';
 import BuyCryptoView from './view/BuyCryptoView';
 import TokenManagementView from './view/TokenManagementView';
@@ -24,12 +30,15 @@ const App: React.FC = () => {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <Router>
-          {/* Container chính: Màu nền tối */}
-          <div className="min-h-screen bg-slate-900 text-white font-sans">
+          {/* Thêm class 'flex flex-col' để bố cục trang trải dài theo chiều dọc,
+             giúp Footer luôn bị đẩy xuống đáy.
+          */}
+          <div className="min-h-screen bg-slate-900 text-white font-sans flex flex-col">
             
             <Header />
 
-            <main>
+            {/* Thêm class 'flex-grow' để phần nội dung chính chiếm hết khoảng trống còn lại */}
+            <main className="flex-grow">
               <Routes>
                 {/* Trang chủ */}
                 <Route path="/" element={<><HeroSection /><FeaturesSection /></>} />
@@ -38,16 +47,30 @@ const App: React.FC = () => {
                 <Route path="/trade" element={<TradeView />} />
                 <Route path="/mint" element={<MintView />} />
                 
-                {/* Các trang giữ chỗ (Placeholder) */}
+                {/* Các trang giữ chỗ */}
                 <Route path="/earn" element={<EarnView />} />
                 <Route path="/buy-crypto" element={<BuyCryptoView />} />
                 <Route path="/tokens" element={<TokenManagementView />} />
               </Routes>
             </main>
 
-            <footer className="border-t border-slate-800 py-8 mt-12 text-center text-slate-500">
-              <p>© 2025 Zenith Portal. All rights reserved.</p>
-            </footer>
+            {/* --- 2. SỬ DỤNG COMPONENT FOOTER MỚI --- */}
+            <Footer />
+            {/* --------------------------------------- */}
+
+            {/* --- 3. TOAST CONTAINER --- */}
+            <ToastContainer 
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+            />
 
           </div>
         </Router>

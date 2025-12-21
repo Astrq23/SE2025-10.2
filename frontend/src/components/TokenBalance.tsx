@@ -18,7 +18,7 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer })
   if (!isConnected) {
     return (
       <div style={{ color: '#ef4444', textAlign: 'center', padding: '20px' }}>
-        Vui lòng kết nối ví
+        Please connect your wallet
       </div>
     );
   }
@@ -26,39 +26,39 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer })
   if (!tokenAddress || !isValidAddress(tokenAddress)) {
     return (
       <div style={{ color: '#ef4444', textAlign: 'center', padding: '20px' }}>
-        Địa chỉ token không hợp lệ
+        Invalid token address
       </div>
     );
   }
 
   const handleTransfer = () => {
-    // Kiểm tra địa chỉ
+    // Check address
     if (!isValidAddress(toAddress)) {
-      alert('❌ Địa chỉ không hợp lệ');
+      alert('❌ Invalid address');
       return;
     }
 
-    // Kiểm tra số lượng
+    // Check amount
     const amount = parseFloat(transferAmount);
     if (!transferAmount || amount <= 0) {
-      alert('❌ Số lượng không hợp lệ');
+      alert('❌ Invalid amount');
       return;
     }
 
-    // Kiểm tra số dư (RẤT QUAN TRỌNG)
+    // Check balance (VERY IMPORTANT)
     const currentBalance = parseFloat(balance);
     if (amount > currentBalance) {
-      alert(`❌ Không đủ token!\n\nSố dư: ${balance} ${symbol}\nMuốn gửi: ${transferAmount} ${symbol}`);
+      alert(`❌ Insufficient balance!\n\nBalance: ${balance} ${symbol}\nSending: ${transferAmount} ${symbol}`);
       return;
     }
 
-    // Kiểm tra địa chỉ không gửi cho chính mình
+    // Check self-transfer
     if (toAddress.toLowerCase() === userAddress?.toLowerCase()) {
-      alert('❌ Không thể gửi cho chính mình!');
+      alert('❌ Cannot send to yourself!');
       return;
     }
 
-    // Nếu tất cả kiểm tra đều pass
+    // If all checks pass
     if (onTransfer) {
       onTransfer(toAddress, transferAmount);
       setToAddress('');
@@ -77,7 +77,7 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer })
         marginTop: '20px',
       }}
     >
-      {/* Thông tin Token */}
+      {/* Token Info */}
       <div style={{ marginBottom: '20px' }}>
         <h3 style={{ color: '#ffffff', marginBottom: '10px' }}>
           {name || symbol || 'Unknown Token'}
@@ -86,7 +86,7 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer })
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
           <div>
             <div style={{ color: '#b8c0cc', fontSize: '0.85rem', marginBottom: '5px' }}>
-              Địa chỉ Token
+              Token Address
             </div>
             <div style={{ color: '#4ade80', fontSize: '0.95rem', fontFamily: 'monospace' }}>
               {truncateAddress(tokenAddress)}
@@ -95,7 +95,7 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer })
 
           <div>
             <div style={{ color: '#b8c0cc', fontSize: '0.85rem', marginBottom: '5px' }}>
-              Địa chỉ Ví
+              Wallet Address
             </div>
             <div style={{ color: '#06b6d4', fontSize: '0.95rem', fontFamily: 'monospace' }}>
               {truncateAddress(userAddress || '')}
@@ -104,7 +104,7 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer })
         </div>
       </div>
 
-      {/* Số dư */}
+      {/* Balance */}
       <div
         style={{
           backgroundColor: '#0f172a',
@@ -115,7 +115,7 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer })
         }}
       >
         <div style={{ color: '#b8c0cc', fontSize: '0.85rem', marginBottom: '8px' }}>
-          Số dư
+          Balance
         </div>
         <div
           style={{
@@ -139,7 +139,7 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer })
         </div>
       )}
 
-      {/* Nút Transfer */}
+      {/* Transfer Button */}
       <button
         onClick={() => setShowTransfer(!showTransfer)}
         style={{
@@ -155,10 +155,10 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer })
           marginBottom: showTransfer ? '15px' : '0',
         }}
       >
-        {showTransfer ? '✕ Hủy' : '📤 Gửi Token'}
+        {showTransfer ? '✕ Cancel' : '📤 Send Token'}
       </button>
 
-      {/* Form Transfer */}
+      {/* Transfer Form */}
       {showTransfer && (
         <div
           style={{
@@ -170,7 +170,7 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer })
         >
           <div style={{ marginBottom: '15px' }}>
             <label style={{ color: '#b8c0cc', display: 'block', marginBottom: '5px' }}>
-              Gửi đến
+              Send to
             </label>
             <input
               type="text"
@@ -192,7 +192,7 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer })
 
           <div style={{ marginBottom: '15px' }}>
             <label style={{ color: '#b8c0cc', display: 'block', marginBottom: '5px' }}>
-              Số lượng (Sẵn có: {balance} {symbol})
+              Amount (Available: {balance} {symbol})
             </label>
             <input
               type="number"
@@ -214,7 +214,7 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer })
             />
             {parseFloat(transferAmount) > parseFloat(balance) && (
               <div style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '5px' }}>
-                ⚠️ Số lượng vượt quá số dư!
+                ⚠️ Amount exceeds balance!
               </div>
             )}
           </div>
@@ -245,14 +245,14 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer })
                   opacity: isDisabled ? 0.6 : 1,
                 }}
                 title={
-                  !isValidAddress(toAddress) ? 'Địa chỉ không hợp lệ' :
-                  amount <= 0 ? 'Số lượng phải > 0' :
-                  amount > currentBalance ? `Không đủ token (cần ${amount}, có ${currentBalance})` :
-                  toAddress.toLowerCase() === userAddress?.toLowerCase() ? 'Không thể gửi cho chính mình' :
-                  'Xác nhận gửi token'
+                  !isValidAddress(toAddress) ? 'Invalid address' :
+                  amount <= 0 ? 'Amount must be > 0' :
+                  amount > currentBalance ? `Insufficient tokens (need ${amount}, have ${currentBalance})` :
+                  toAddress.toLowerCase() === userAddress?.toLowerCase() ? 'Cannot send to yourself' :
+                  'Confirm transfer'
                 }
               >
-                {isApproving ? '⏳ Đang xử lý...' : '✓ Xác nhận Gửi'}
+                {isApproving ? '⏳ Processing...' : '✓ Confirm Send'}
               </button>
             );
           })()}

@@ -1,121 +1,124 @@
 // src/components/MintingBox.tsx
 
 import React, { useState } from 'react';
-import { 
-    useWriteContract, 
-    useWaitForTransactionReceipt, 
-    useAccount, 
-    useSimulateContract
-} from 'wagmi';
+import { useWriteContract, useAccount } from 'wagmi';
+import { toast } from 'react-toastify'; 
 
 import ZenithNFTArtifact from "../abis/ZenithNFT.json"; 
 import { CONTRACT_ADDRESSES } from "../constants/addresses";
 
-const MINT_COST_NOTE = "Hợp đồng này không yêu cầu phí mạng lưới (ETH/BNB) ngoài gas fee."; 
+// English Note
+const MINT_COST_NOTE = "This contract requires no network fees (ETH/BNB) beyond gas fees."; 
 
 const MintingBox: React.FC = () => {
-    // 1. Lấy thêm 'address' từ hook này để biết ví nhận NFT
+    // 1. Wallet Info
     const { isConnected, address } = useAccount();
-    const [mintAmount, setMintAmount] = useState(1);
+    
+    // State for Amount
+    const [mintAmount, setMintAmount] = useState<number>(1);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     const contractAbi = ZenithNFTArtifact.abi;
     const contractAddress = CONTRACT_ADDRESSES.localhost.NFT as `0x${string}`;
 
-    // 2. Cấu hình giao dịch (Simulate)
-    const { 
-        data: simulationData, 
-        error: simulationError, 
-        isPending: isSimulating 
-    } = useSimulateContract({
-        address: contractAddress,
-        abi: contractAbi,
-        functionName: 'safeMint', 
-        args: [
-            // --- SỬA LỖI Ở ĐÂY ---
-            // Truyền đúng 2 tham số mà Contract yêu cầu:
-            address, // 1. Địa chỉ người nhận (Ví đang kết nối)
-            "https://gateway.pinata.cloud/ipfs/QmExampleHash" // 2. URI của NFT (Link ảnh mẫu)
-        ],
-        query: {
-            enabled: isConnected && !!address, 
-        },
-    });
+    // Write Hook
+    const { writeContractAsync } = useWriteContract();
 
-    // 3. Hook Gửi giao dịch
-    const { 
-        data: hash, 
-        writeContract, 
-        isPending: isWritePending, 
-        isError: isWriteError, 
-        error: writeError 
-    } = useWriteContract();
+    // --- HANDLERS ---
+    const handleDecrease = () => {
+        if (mintAmount > 1) setMintAmount(prev => prev - 1);
+    };
 
-    // 4. Hook Chờ xác nhận
-    const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash });
+    const handleIncrease = () => {
+        if (mintAmount < 10) setMintAmount(prev => prev + 1); // Max 10
+    };
 
-    // Trạng thái chung
-    const isReadyToMint = isConnected && !isSimulating && simulationData?.request && !isWritePending && !isConfirming;
-    const isDisabled = !isReadyToMint || isWritePending || isConfirming || simulationError !== null;
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = parseInt(e.target.value);
+        if (!isNaN(val) && val >= 1 && val <= 50) {
+            setMintAmount(val);
+        }
+    };
 
-    const handleMint = () => {
+    // --- MINT FUNCTION ---
+    const handleMint = async () => {
         if (!isConnected) {
-            alert("Vui lòng kết nối ví để Mint NFT.");
+            toast.warn("Please connect your wallet to Mint NFTs.");
             return;
         }
 
-        if (simulationError) {
-             const errorMessage = (simulationError as any).shortMessage || simulationError.message;
-             alert(`Lỗi Hợp Đồng: ${errorMessage}`);
-             return;
-        }
+        setIsProcessing(true); 
 
-        if (simulationData?.request) {
-            try {
-                writeContract(simulationData.request);
-            } catch (err) {
-                console.error("Lỗi khi chuẩn bị giao dịch:", err);
+        try {
+            // Loop for Batch Minting (since contract supports single mint)
+            for (let i = 0; i < mintAmount; i++) {
+                
+                toast.info(`📝 Requesting signature ${i + 1}/${mintAmount}...`, { autoClose: 2000 });
+
+                // Call Wallet
+                const txHash = await writeContractAsync({
+                    address: contractAddress,
+                    abi: contractAbi,
+                    functionName: 'safeMint',
+                    args: [
+                        address, // Receiver
+                        "https://gateway.pinata.cloud/ipfs/QmExampleHash" // URI
+                    ],
+                });
+
+                // Toast Transaction Sent
+                toast.success(`🚀 Transaction ${i + 1} sent! Hash: ${txHash.slice(0, 6)}...`);
+                
+                // Small delay
+                await new Promise(r => setTimeout(r, 1000));
             }
+
+            toast.success("✅ Minting process completed!");
+
+        } catch (error: any) {
+            console.error("Mint Error:", error);
+            if (error.code === 4001 || error.message.includes("User denied")) {
+                toast.warn("You denied the transaction.");
+            } else {
+                toast.error("An error occurred while Minting.");
+            }
+        } finally {
+            setIsProcessing(false); 
         }
     };
     
     // --- STYLES ---
-    const colorRed = '#ef4444'; 
-    const colorGreen = '#10b981';
-    const colorYellow = '#f59e0b'; 
-    const colorGray = '#9ca3af'; 
     const colorWhite = 'white';
-
-    const renderStatus = () => {
-        let errorMessage = '';
-
-        if (simulationError) {
-            errorMessage = (simulationError as any).shortMessage || simulationError.message;
-            return <p style={{ color: colorRed, marginTop: '10px' }}>Lỗi Hợp Đồng: {errorMessage}</p>;
-        }
-        
-        if (isWriteError) {
-            errorMessage = (writeError as any).shortMessage || writeError?.message;
-            return <p style={{ color: colorRed, marginTop: '10px' }}>Lỗi Ví/Gửi: {errorMessage}</p>;
-        }
-        
-        if (isConfirmed) return <p style={{ color: colorGreen, fontWeight: 'bold', marginTop: '10px' }}>Mint thành công! Hash: {hash}</p>;
-        if (isConfirming) return <p style={{ color: colorYellow, marginTop: '10px' }}>Đang chờ xác nhận giao dịch...</p>;
-        if (isWritePending) return <p style={{ color: colorYellow, marginTop: '10px' }}>Đang chờ bạn xác nhận trong ví...</p>;
-        if (isSimulating) return <p style={{ color: colorGray, marginTop: '10px' }}>Đang kiểm tra tính hợp lệ...</p>;
-
-        return null;
-    };
+    const colorGray = '#9ca3af'; 
 
     const inputStyle: React.CSSProperties = {
-        width: '5rem', 
+        width: '4rem', 
         padding: '0.5rem', 
         backgroundColor: '#374151', 
         border: '1px solid #4b5563', 
         borderRadius: '0.25rem', 
         color: colorWhite,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: '1.2rem',
+        fontWeight: 'bold',
+        outline: 'none'
     };
     
+    const controlButtonStyle: React.CSSProperties = {
+        background: '#4b5563',
+        border: 'none',
+        color: 'white',
+        fontSize: '1.2rem',
+        width: '36px',
+        height: '36px',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        transition: 'background 0.2s'
+    };
+
     const buttonBaseStyle: React.CSSProperties = {
         width: '100%',
         padding: '0.75rem',
@@ -124,13 +127,14 @@ const MintingBox: React.FC = () => {
         fontWeight: 'bold',
         transition: 'background-color 0.2s',
         border: 'none',
-        cursor: 'pointer',
+        cursor: isProcessing ? 'wait' : 'pointer', 
     };
     
     const buttonActiveStyle: React.CSSProperties = {
         ...buttonBaseStyle,
         backgroundColor: '#3b82f6', 
         color: colorWhite,
+        boxShadow: '0 4px 12px rgba(59, 130, 246, 0.4)'
     };
 
     const buttonDisabledStyle: React.CSSProperties = {
@@ -142,59 +146,79 @@ const MintingBox: React.FC = () => {
 
     const containerStyle: React.CSSProperties = {
         backgroundColor: '#1f2937', 
-        padding: '1.5rem', 
+        padding: '2rem', 
         borderRadius: '1rem', 
         width: '100%',
-        maxWidth: '24rem', 
+        maxWidth: '28rem', 
         margin: '0 auto', 
-        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-        boxSizing: 'border-box'
+        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.3)',
+        boxSizing: 'border-box',
+        border: '1px solid #374151'
     };
     
     return (
         <div style={containerStyle}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: colorWhite, marginBottom: '1rem' }}>
+            <h3 style={{ fontSize: '1.8rem', fontWeight: 'bold', color: colorWhite, marginBottom: '0.5rem' }}>
                 Mint Your NFT
             </h3>
-            <p style={{ color: colorGray, marginBottom: '1rem', fontSize: '0.875rem', fontStyle: 'italic' }}>
+            <p style={{ color: colorGray, marginBottom: '2rem', fontSize: '0.9rem', fontStyle: 'italic', lineHeight: '1.4' }}>
                 {MINT_COST_NOTE}
             </p>
             
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                <label style={{ color: colorWhite }}>Số lượng:</label>
-                <input
-                    type="number"
-                    min="1"
-                    value={mintAmount}
-                    onChange={(e) => setMintAmount(Math.max(1, parseInt(e.target.value) || 1))}
-                    style={inputStyle}
-                    // Tạm thời disable input này vì contract chỉ mint 1 cái/lần
-                    disabled={true} 
-                    title="Hiện tại chỉ hỗ trợ Mint từng cái một"
-                />
+            {/* AMOUNT SELECTION */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', backgroundColor: '#111827', padding: '1rem', borderRadius: '0.75rem' }}>
+                <label style={{ color: colorWhite, fontWeight: '600' }}>Amount:</label>
+                <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
+                     <button 
+                        onClick={handleDecrease}
+                        disabled={isProcessing}
+                        style={{...controlButtonStyle, opacity: isProcessing ? 0.5 : 1}}
+                     >
+                        -
+                     </button>
+
+                     <input
+                        type="number"
+                        min="1"
+                        max="50"
+                        value={mintAmount}
+                        onChange={handleInputChange}
+                        disabled={isProcessing} 
+                        style={inputStyle}
+                    />
+
+                     <button 
+                        onClick={handleIncrease}
+                        disabled={isProcessing}
+                        style={{...controlButtonStyle, opacity: isProcessing ? 0.5 : 1}}
+                     >
+                        +
+                     </button>
+                </div>
             </div>
 
-            <p style={{ fontSize: '1.125rem', color: '#fbbf24', marginBottom: '1.5rem' }}>
-                Đang Mint: 1 NFT
-            </p>
+            <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                 <span style={{ color: '#fbbf24', fontWeight: 'bold', fontSize: '1rem', background: 'rgba(251, 191, 36, 0.1)', padding: '0.5rem 1rem', borderRadius: '2rem' }}>
+                    🔥 Total Mint: {mintAmount} NFT
+                 </span>
+            </div>
             
+            {/* MINT BUTTON */}
             <button
                 onClick={handleMint}
-                disabled={isDisabled}
-                style={isDisabled ? buttonDisabledStyle : buttonActiveStyle}
+                disabled={!isConnected || isProcessing} 
+                style={(!isConnected || isProcessing) ? buttonDisabledStyle : buttonActiveStyle}
                 onMouseEnter={(e) => {
-                    if (!isDisabled) e.currentTarget.style.backgroundColor = '#2563eb';
+                    if (isConnected && !isProcessing) e.currentTarget.style.backgroundColor = '#2563eb';
                 }}
                 onMouseLeave={(e) => {
-                    if (!isDisabled) e.currentTarget.style.backgroundColor = '#3b82f6';
+                    if (isConnected && !isProcessing) e.currentTarget.style.backgroundColor = '#3b82f6';
                 }}
             >
-                {isConnected ? 
-                    (isSimulating ? 'Đang kiểm tra...' : (isDisabled ? 'Không thể Mint' : `Mint Ngay`)) : 
-                    'Vui lòng kết nối ví'}
+                {!isConnected ? 'Please Connect Wallet' : 
+                 isProcessing ? `Processing ${mintAmount} NFT...` : 
+                 `Mint Now`}
             </button>
-            
-            <div style={{ marginTop: '1rem' }}>{renderStatus()}</div>
         </div>
     );
 };
