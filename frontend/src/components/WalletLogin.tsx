@@ -23,21 +23,21 @@ const WalletLogin: React.FC = () => {
         <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.6)]"></div>
         
         <div className="flex flex-col">
-          <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">
+          {/* <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">
             Connected
-          </span>
+          </span> */}
           <span className="text-sm font-mono font-bold text-white tracking-wide">
-            {address.slice(0, 6)}...{address.slice(-4)}
+            {/* {address.slice(0, 6)}...{address.slice(-4)} */}
           </span>
         </div>
 
         {/* Nút thoát */}
         <button
           onClick={() => disconnect()}
-          className="ml-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 p-2 rounded-lg transition-all"
+          className="ml-1 text-slate-400 hover:text-red-400 hover:bg-red-500/10 p-0.5 rounded-lg transition-all"
           title="Ngắt kết nối"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
             <polyline points="16 17 21 12 16 7"></polyline>
             <line x1="21" y1="12" x2="9" y2="12"></line>
@@ -51,17 +51,17 @@ const WalletLogin: React.FC = () => {
   return (
     <button
       onClick={handleLogin}
-      className="group relative px-6 py-3 font-bold text-white rounded-xl transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-indigo-500/25 overflow-hidden"
+      className="group relative px-4 py-2 font-bold text-white rounded-xl transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-indigo-500/25 overflow-hidden"
     >
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all group-hover:from-indigo-500 group-hover:to-purple-500"></div>
       
       {/* Nội dung nút */}
       <div className="relative flex items-center gap-2">
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        {/* <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-        <span>Connect Wallet</span>
+        </svg>} */}
+        <span>Connect Wallet</span> 
       </div>
     </button>
   );

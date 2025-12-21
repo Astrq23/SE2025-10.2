@@ -23,6 +23,9 @@ const navLinks = [
   { name: 'MintNFT', href: '/mint', isHighlight: false },
   { name: 'Tokens', href: '/tokens', isHighlight: false },
   { name: 'Earn', href: '/earn', isHighlight: false },
+  { name: '🔒 Staking', href: '/staking', isHighlight: false },
+  { name: '⇅ Swap', href: '/swap', isHighlight: false },
+  { name: '🎨 Marketplace', href: '/nft-marketplace', isHighlight: false }
 ];
 
 const Header: React.FC = () => {

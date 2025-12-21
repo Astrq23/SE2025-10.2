@@ -11,15 +11,15 @@ const TradeView: React.FC = () => {
   const [selectedCoin, setSelectedCoin] = useState<string>('BTC');
 
   return (
-    // Container chính: Full Width 100%, đè box-sizing để padding không làm vỡ
+    // Main Container: Full Width 100%, override box-sizing so padding doesn't break layout
     <div className="min-h-screen bg-defi-bg text-white" style={{ width: '100%', boxSizing: 'border-box' }}>
       <div
         style={{
-          width: '100%',          // Ép chiều rộng luôn là 100%
-          maxWidth: '100%',       // Gỡ bỏ mọi giới hạn
-          margin: '0',            // Xóa margin auto
-          // --- SỬA TẠI ĐÂY ---
-          padding: '30px 6%',     // Dùng % để căn lề (6% chiều rộng màn hình)
+          width: '100%',          // Force width to always be 100%
+          maxWidth: '100%',       // Remove all limits
+          margin: '0',            // Remove margin auto
+          // --- CHANGED HERE ---
+          padding: '30px 6%',     // Use % for margins (6% of screen width)
           // -------------------
           boxSizing: 'border-box'
         }}
@@ -72,7 +72,7 @@ const TradeView: React.FC = () => {
           </div>
         </div>
 
-        {/* Layout chính: Flexbox để chart + order book cùng hàng */}
+        {/* Layout main: Flexbox to place chart + order book side by side */}
         <div style={{ 
             display: 'grid',
             gridTemplateColumns: '2fr 1fr',
@@ -80,7 +80,7 @@ const TradeView: React.FC = () => {
             width: '100%' 
         }}>
           
-          {/* CỘT 1: BIỂU ĐỒ */}
+          {/* COLUMN 1: CHART */}
           <div style={{
               backgroundColor: '#1e293b',
               borderRadius: '16px',
@@ -95,7 +95,7 @@ const TradeView: React.FC = () => {
                 </div>
             </div>
 
-          {/* CỘT 2: ORDERBOOK */}
+          {/* COLUMN 2: ORDERBOOK */}
           <div style={{ 
               backgroundColor: '#1e293b',
               borderRadius: '16px',

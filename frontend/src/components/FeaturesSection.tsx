@@ -74,7 +74,7 @@ const FeaturesSection: React.FC = () => {
         {/* Lưới các tính năng */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gridTemplateColumns: 'repeat(3, minmax(300px, 1fr))',
           gap: '30px',
           marginBottom: '60px'
         }}>

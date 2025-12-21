@@ -1,6 +1,6 @@
 import React from 'react';
-// import AppPagination from '../components/AppPagination'; // <--- XÓA IMPORT NÀY
-// import FeaturesSection from '../components/FeaturesSection'; // <--- XÓA IMPORT NÀY
+// import AppPagination from '../components/AppPagination'; // <--- REMOVE THIS IMPORT
+// import FeaturesSection from '../components/FeaturesSection'; // <--- REMOVE THIS IMPORT
 import BuyCryptoBox from '../components/BuyCryptoBox'; 
 
 const BuyCryptoView: React.FC = () => {
@@ -13,7 +13,7 @@ const BuyCryptoView: React.FC = () => {
                     padding: '20px 20px 80px',
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center', // Căn giữa BuyCryptoBox
+                    alignItems: 'center', // Center BuyCryptoBox
                 }}
             >
                 

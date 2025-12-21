@@ -24,6 +24,9 @@ import MintView from './view/MintView';
 import EarnView from './view/EarnView';
 import BuyCryptoView from './view/BuyCryptoView';
 import TokenManagementView from './view/TokenManagementView';
+import StakingView from './view/StakingView';
+import SwapView from './view/SwapView';
+import NFTMarketplaceView from './view/NFTMarketplaceView';
 
 const App: React.FC = () => {
   return (
@@ -47,7 +50,12 @@ const App: React.FC = () => {
                 <Route path="/trade" element={<TradeView />} />
                 <Route path="/mint" element={<MintView />} />
                 
-                {/* Các trang giữ chỗ */}
+                {/* Tier-1 Features - Staking, Swap, Marketplace */}
+                <Route path="/staking" element={<StakingView />} />
+                <Route path="/swap" element={<SwapView />} />
+                <Route path="/nft-marketplace" element={<NFTMarketplaceView />} />
+                
+                {/* Các trang khác */}
                 <Route path="/earn" element={<EarnView />} />
                 <Route path="/buy-crypto" element={<BuyCryptoView />} />
                 <Route path="/tokens" element={<TokenManagementView />} />

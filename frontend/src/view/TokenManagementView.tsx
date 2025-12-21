@@ -13,7 +13,7 @@ const TokenManagementView: React.FC = () => {
 
   const handleTransfer = (to: string, amount: string) => {
     console.log(`Transfer ${amount} to ${to}`);
-    alert(`Đã gửi ${amount} token đến ${to}`);
+    alert(`Transferred ${amount} tokens to ${to}`);
   };
 
   return (
@@ -25,22 +25,22 @@ const TokenManagementView: React.FC = () => {
           padding: '20px 20px 80px',
         }}
       >
-        {/* Tiêu đề */}
+        {/* Title */}
         <h1 style={{ color: '#facc15', fontSize: '2.5rem', marginBottom: '20px' }}>
-          Quản lý Token ERC-20
+          ERC-20 Token Management
         </h1>
         <p style={{ color: '#b8c0cc', fontSize: '1.25rem', marginBottom: '40px' }}>
-          Xem số dư, gửi và quản lý các token ERC-20 của bạn trên các blockchain khác nhau.
+          View balance, send, and manage your ERC-20 tokens across different blockchains.
         </p>
 
-        {/* Layout chính */}
+        {/* Main Layout */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '30px' }}>
-          {/* Cột trái: Token Selector */}
+          {/* Left Column: Token Selector */}
           <div>
             <TokenSelector onTokenSelect={handleTokenSelect} selectedToken={selectedToken} />
           </div>
 
-          {/* Cột phải: Token Balance & Transfer */}
+          {/* Right Column: Token Balance & Transfer */}
           <div>
             {selectedToken ? (
               <TokenBalance
@@ -66,17 +66,17 @@ const TokenManagementView: React.FC = () => {
                   🪙
                 </div>
                 <h3 style={{ color: '#b8c0cc', marginBottom: '10px' }}>
-                  Chọn một token để bắt đầu
+                  Select a token to start
                 </h3>
                 <p style={{ color: '#88909c' }}>
-                  Chọn từ danh sách token phổ biến hoặc thêm token tùy chỉnh
+                  Select from the list of popular tokens or add a custom token
                 </p>
               </div>
             )}
           </div>
         </div>
 
-        {/* Phần thông tin chi tiết */}
+        {/* Detailed Information Section */}
         <div
           style={{
             marginTop: '60px',
@@ -87,47 +87,47 @@ const TokenManagementView: React.FC = () => {
           }}
         >
           <h2 style={{ color: '#facc15', fontSize: '1.8rem', marginBottom: '20px' }}>
-            Về Quản lý Token ERC-20
+            About ERC-20 Token Management
           </h2>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
             <div>
               <h3 style={{ color: '#4ade80', marginBottom: '10px', fontSize: '1.1rem' }}>
-                ✓ Xem Số Dư
+                ✓ View Balance
               </h3>
               <p style={{ color: '#b8c0cc', lineHeight: '1.6' }}>
-                Kiểm tra số dư token của bạn trên bất kỳ blockchain nào được hỗ trợ, bao gồm
-                BNB Chain, Ethereum, Arbitrum và nhiều chuỗi khác.
+                Check your token balance on any supported blockchain, including
+                BNB Chain, Ethereum, Arbitrum and many other chains.
               </p>
             </div>
 
             <div>
               <h3 style={{ color: '#4ade80', marginBottom: '10px', fontSize: '1.1rem' }}>
-                📤 Gửi Token
+                📤 Send Tokens
               </h3>
               <p style={{ color: '#b8c0cc', lineHeight: '1.6' }}>
-                Gửi token của bạn đến bất kỳ địa chỉ Ethereum nào một cách nhanh chóng và
-                an toàn với phí giao dịch tối ưu.
+                Send your tokens to any Ethereum address quickly and
+                securely with optimized transaction fees.
               </p>
             </div>
 
             <div>
               <h3 style={{ color: '#4ade80', marginBottom: '10px', fontSize: '1.1rem' }}>
-                🔐 Phê Duyệt Token
+                🔐 Approve Tokens
               </h3>
               <p style={{ color: '#b8c0cc', lineHeight: '1.6' }}>
-                Phê duyệt token cho các hợp đồng thông minh trước khi thực hiện các giao dịch
-                như swap, stake hoặc borrow.
+                Approve tokens for smart contracts before performing transactions
+                such as swap, stake, or borrow.
               </p>
             </div>
 
             <div>
               <h3 style={{ color: '#4ade80', marginBottom: '10px', fontSize: '1.1rem' }}>
-                🌐 Đa Blockchain
+                🌐 Multi-Blockchain
               </h3>
               <p style={{ color: '#b8c0cc', lineHeight: '1.6' }}>
-                Quản lý token trên nhiều blockchain chỉ từ một interface, không cần chuyển đổi
-                mạng liên tục.
+                Manage tokens across multiple blockchains from a single interface, without needing to
+                switch networks constantly.
               </p>
             </div>
           </div>

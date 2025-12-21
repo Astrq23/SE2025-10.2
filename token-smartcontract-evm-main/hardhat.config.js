@@ -2,10 +2,7 @@ const { config: dotenvConfig } = require("dotenv");
 const { resolve } = require("path");
 require("@nomicfoundation/hardhat-ignition-ethers");
 
-// const dotenvConfigPath = process.env.DOTENV_CONFIG_PATH || "./.env";
-const dotenvConfigPath = "D:\\cnpm\\SE2025-10.2\\token-smartcontract-evm-main\\.env";
-
-dotenvConfig({ path: resolve(__dirname, dotenvConfigPath) });
+dotenvConfig({ path: resolve(__dirname, ".env") });
 console.log(">>> DEBUG privateKeys =", process.env.PRIVATE_KEYS);
 
 const mnemonic = process.env.MNEMONIC || "";
