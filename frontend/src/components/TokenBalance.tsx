@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useToken } from '../hooks/useToken';
 import { useAccount } from 'wagmi';
 import { truncateAddress, isValidAddress } from '../utils/tokenUtils';
+import { toast } from 'react-toastify';
 
 interface TokenBalanceProps {
   tokenAddress?: `0x${string}`;
@@ -34,27 +35,27 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer })
   const handleTransfer = () => {
     // Check address
     if (!isValidAddress(toAddress)) {
-      alert('❌ Invalid address');
+      toast.error('❌ Invalid address');
       return;
     }
 
     // Check amount
     const amount = parseFloat(transferAmount);
     if (!transferAmount || amount <= 0) {
-      alert('❌ Invalid amount');
+      toast.error('❌ Invalid amount');
       return;
     }
 
     // Check balance (VERY IMPORTANT)
     const currentBalance = parseFloat(balance);
     if (amount > currentBalance) {
-      alert(`❌ Insufficient balance!\n\nBalance: ${balance} ${symbol}\nSending: ${transferAmount} ${symbol}`);
+      toast.error(`❌ Insufficient balance!\n\nBalance: ${balance} ${symbol}\nSending: ${transferAmount} ${symbol}`);
       return;
     }
 
     // Check self-transfer
     if (toAddress.toLowerCase() === userAddress?.toLowerCase()) {
-      alert('❌ Cannot send to yourself!');
+      toast.error('❌ Cannot send to yourself!');
       return;
     }
 

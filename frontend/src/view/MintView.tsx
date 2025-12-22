@@ -67,10 +67,7 @@ const MintView: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Pagination */}
-                    <div className="flex justify-center mt-12">
-                        <AppPagination />
-                    </div>
+
                 </div>
             </div>
         </div>
