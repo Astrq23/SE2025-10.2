@@ -10,7 +10,7 @@ interface TokenBalanceProps {
 
 const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer }) => {
   const { address: userAddress, isConnected } = useAccount();
-  const { balance, symbol, decimals, name, isApproving, error } = useToken(tokenAddress);
+  const { balance, symbol, decimals, name, isApproving, error, transfer } = useToken(tokenAddress);
   const [showTransfer, setShowTransfer] = useState(false);
   const [toAddress, setToAddress] = useState('');
   const [transferAmount, setTransferAmount] = useState('');
@@ -58,13 +58,22 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer })
       return;
     }
 
-    // If all checks pass
-    if (onTransfer) {
-      onTransfer(toAddress, transferAmount);
-      setToAddress('');
-      setTransferAmount('');
-      setShowTransfer(false);
-    }
+    // If all checks pass, perform the transfer via the hook and then
+    // call the optional `onTransfer` callback as a notification.
+    (async () => {
+      try {
+        await transfer(toAddress, transferAmount);
+        // notify parent (if provided)
+        if (onTransfer) onTransfer(toAddress, transferAmount);
+        setToAddress('');
+        setTransferAmount('');
+        setShowTransfer(false);
+        alert(`✅ Sent ${transferAmount} ${symbol} to ${truncateAddress(toAddress)}`);
+      } catch (err: any) {
+        console.error('Transfer error', err);
+        alert('❌ Transfer failed: ' + (err?.message || err));
+      }
+    })();
   };
 
   return (
