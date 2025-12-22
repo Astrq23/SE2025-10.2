@@ -146,8 +146,16 @@ const MintingBox: React.FC = () => {
             {/* SUMMARY SECTION */}
             <div style={{ backgroundColor: '#111827', borderRadius: '1rem', padding: '1.25rem', marginBottom: '2.5rem', border: '1px solid #374151' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', fontSize: '0.9rem' }}>
+                    <span style={{ color: colorGray }}>Unit Price:</span>
+                    <span style={{ color: '#10b981', fontWeight: 'bold' }}>Free</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', fontSize: '0.9rem' }}>
                     <span style={{ color: colorGray }}>Total Quantity:</span>
                     <span style={{ color: colorWhite }}>{mintAmount} NFT{mintAmount > 1 ? 's' : ''}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', fontSize: '0.9rem' }}>
+                    <span style={{ color: colorGray }}>Network:</span>
+                    <span style={{ color: colorWhite }}>Ethereum Local</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', paddingTop: '0.75rem', borderTop: '1px solid #374151', marginTop: '0.25rem' }}>
                     <span style={{ color: colorGray }}>Recipient:</span>

@@ -19,7 +19,7 @@ const SUPPORTED_NETWORKS: { symbol: string; logo: string }[] = [
 const HeroSection: React.FC = () => {
   return (
     // Outer Container: Thêm relative và overflow-hidden để "nhốt" video lại
-    <div style={{ width: '100%', boxSizing: 'border-box', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ width: '100%', boxSizing: 'border-box', position: 'relative', overflow: 'hidden', backgroundColor: '#0f172a' }}>
       
       {/* --- 1. VIDEO BACKGROUND --- */}
       {/* Nằm tuyệt đối ở lớp dưới cùng (z-0) */}
@@ -38,7 +38,7 @@ const HeroSection: React.FC = () => {
           zIndex: 0, 
         }}
       >
-        <source src="/bg-video.mp4" type="video/mp4" />
+        <source src={`${import.meta.env.BASE_URL}bg-video.mp4`} type="video/mp4" />
       </video>
 
       {/* Lớp phủ tối (Overlay) để chữ dễ đọc */}

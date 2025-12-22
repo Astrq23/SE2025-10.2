@@ -1,6 +1,9 @@
 import React from 'react';
 import MintingBox from '../components/MintingBox';
 import AppPagination from '../components/AppPagination';
+import nftBg from '../assets/nft.jpg';
+
+
 
 const MintView: React.FC = () => {
     return (
@@ -10,7 +13,7 @@ const MintView: React.FC = () => {
             {/* 1. BACKGROUND IMAGE (CỐ ĐỊNH) */}
             {/* Dùng thẻ img với position fixed để làm hình nền không bị trôi */}
             <img
-                src="/nft.jpg" 
+                src={nftBg}
                 alt="NFT Background"
                 style={{
                     position: 'fixed',
@@ -19,7 +22,7 @@ const MintView: React.FC = () => {
                     width: '100%',
                     height: '100%',
                     objectFit: 'cover',
-                    zIndex: -1, // Đẩy xuống dưới cùng
+                    zIndex: 1, // Đẩy xuống dưới cùng
                 }}
             />
 
@@ -33,7 +36,7 @@ const MintView: React.FC = () => {
                     width: '100%',
                     height: '100%',
                     backgroundColor: 'rgba(15, 23, 42, 0.85)', // Màu Slate-900 độ mờ 85%
-                    zIndex: -1,
+                    zIndex: 2,
                 }}
             ></div>
 
@@ -67,7 +70,10 @@ const MintView: React.FC = () => {
                         </div>
                     </div>
 
-
+                    {/* Pagination */}
+                    <div className="flex justify-center mt-12">
+                        <AppPagination />
+                    </div>
                 </div>
             </div>
         </div>

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import TokenSelector from '../components/TokenSelector';
 import TokenBalance from '../components/TokenBalance';
+import tokenBg from '../assets/token.avif';
 import { toast } from 'react-toastify';
 
 const TokenManagementView: React.FC = () => {
@@ -37,7 +38,7 @@ const TokenManagementView: React.FC = () => {
       
       {/* 1. BACKGROUND IMAGE (CỐ ĐỊNH) */}
       <img
-        src="/token.avif" 
+        src={tokenBg}
         alt="Token Background"
         style={{
           position: 'fixed',
@@ -46,7 +47,7 @@ const TokenManagementView: React.FC = () => {
           width: '100%',
           height: '100%',
           objectFit: 'cover',
-          zIndex: -1, 
+          zIndex: 1, 
         }}
       />
 
@@ -59,7 +60,7 @@ const TokenManagementView: React.FC = () => {
           width: '100%',
           height: '100%',
           backgroundColor: 'rgba(15, 23, 42, 0.85)', 
-          zIndex: -1,
+          zIndex: 2,
         }}
       ></div>
 

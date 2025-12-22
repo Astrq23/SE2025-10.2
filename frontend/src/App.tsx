@@ -29,12 +29,12 @@ const App: React.FC = () => {
       <QueryClientProvider client={queryClient}>
         <Router>
           {/* Container chính: Chỉ giữ background màu tối chung cho toàn app */}
-          <div className="min-h-screen font-sans bg-slate-900 text-white flex flex-col">
+          <div style={{ minHeight: '100vh', fontFamily: 'sans-serif', backgroundColor: '#0f172a', color: 'white', display: 'flex', flexDirection: 'column' }}>
             
             {/* Header nằm ở trên cùng (sẽ không bị video đè nữa) */}
             <Header />
 
-            <main className="flex-grow">
+            <main style={{ flexGrow: 1 }}>
               <Routes>
                 {/* Trang chủ: HeroSection (chứa video) + Features */}
                 <Route path="/" element={
