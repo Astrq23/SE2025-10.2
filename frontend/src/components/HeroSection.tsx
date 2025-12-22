@@ -8,10 +8,10 @@ import AppPagination from './AppPagination';
 const SUPPORTED_NETWORKS: { symbol: string; logo: string }[] = [
   { symbol: 'ETH', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025' },
   { symbol: 'BNB', logo: 'https://cryptologos.cc/logos/bnb-bnb-logo.png?v=025' },
-  { symbol: 'BASE', logo: 'https://cryptologos.cc/logos/base-base-logo.png?v=025' },
+  // { symbol: 'BASE', logo: 'https://cryptologos.cc/logos/base-base-logo.png?v=025' },
   { symbol: 'ARB', logo: 'https://cryptologos.cc/logos/arbitrum-arb-logo.png?v=025' },
-  { symbol: 'ZKS', logo: 'https://cryptologos.cc/logos/zksync-zks-logo.png?v=025' },
-  { symbol: 'LINEA', logo: 'https://cryptologos.cc/logos/linea-linea-logo.png?v=025' },
+  // { symbol: 'ZKS', logo: 'https://cryptologos.cc/logos/zksync-zks-logo.png?v=025' },
+  // { symbol: 'LINEA', logo: 'https://cryptologos.cc/logos/linea-linea-logo.png?v=025' },
   { symbol: 'APT', logo: 'https://cryptologos.cc/logos/aptos-apt-logo.png?v=025' },
   { symbol: 'opBNB', logo: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/opbnb/info/logo.png' },
 ];

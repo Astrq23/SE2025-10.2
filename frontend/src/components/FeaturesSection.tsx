@@ -134,7 +134,7 @@ const FeaturesSection: React.FC = () => {
           ))}
         </div>
 
-        {/* Phần thống kê */}
+        {/* Phần thống kê
         <div style={{
           backgroundColor: '#1e293b',
           borderRadius: '16px',
@@ -145,7 +145,7 @@ const FeaturesSection: React.FC = () => {
           gap: '30px',
           textAlign: 'center'
         }}>
-          <div>
+          {/* <div>
             <div style={{
               color: '#4ade80',
               fontSize: '2.5rem',
@@ -157,9 +157,9 @@ const FeaturesSection: React.FC = () => {
             <div style={{ color: '#b8c0cc' }}>
               Total Liquidity
             </div>
-          </div>
+          </div> */}
 
-          <div>
+          {/* <div>
             <div style={{
               color: '#06b6d4',
               fontSize: '2.5rem',
@@ -171,9 +171,9 @@ const FeaturesSection: React.FC = () => {
             <div style={{ color: '#b8c0cc' }}>
               Supported Chains
             </div>
-          </div>
+          </div> */}
 
-          <div>
+          {/* <div>
             <div style={{
               color: '#facc15',
               fontSize: '2.5rem',
@@ -185,9 +185,9 @@ const FeaturesSection: React.FC = () => {
             <div style={{ color: '#b8c0cc' }}>
               Active Users
             </div>
-          </div>
+          </div> */}
 
-          <div>
+          {/* <div>
             <div style={{
               color: '#f87171',
               fontSize: '2.5rem',
@@ -199,8 +199,8 @@ const FeaturesSection: React.FC = () => {
             <div style={{ color: '#b8c0cc' }}>
               Low Trading Fees
             </div>
-          </div>
-        </div>
+          </div> */}
+        {/* </div>  */}
       </div>
     </section>
   );
