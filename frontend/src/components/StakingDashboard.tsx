@@ -139,6 +139,19 @@ const StakingDashboard: React.FC = () => {
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '20px 20px 80px', color: 'white' }}>
+      {/* CSS ĐỂ XÓA MŨI TÊN INPUT NUMBER */}
+      <style>
+        {`
+          input::-webkit-outer-spin-button,
+          input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+          }
+          input[type=number] {
+            -moz-appearance: textfield;
+          }
+        `}
+      </style>
       
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>

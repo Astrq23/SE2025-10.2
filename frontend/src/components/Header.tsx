@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom'; // Thêm useLocation
 
 import WalletLogin from './WalletLogin';
-import TradeDropdown from './TradeDropdown';
 import './Header.css';
 
 // List of networks
@@ -30,23 +29,12 @@ const navLinks = [
 const Header: React.FC = () => {
   const [currentNetwork, setCurrentNetwork] = useState('BNB Chain');
   const [isNetworkOpen, setIsNetworkOpen] = useState(false);
-  const [isTradeDropdownOpen, setIsTradeDropdownOpen] = useState(false);
   
   // Hook lấy đường dẫn hiện tại (Ví dụ: '/mint', '/trade'...)
   const location = useLocation();
 
   // Refs to handle closing dropdown when clicking outside
-  const tradeRef = React.useRef<HTMLDivElement>(null);
   const networkRef = React.useRef<HTMLDivElement>(null);
-
-  // Handle Click (Toggle) for Trade button
-  const handleTradeClick = (e: React.MouseEvent) => {
-    // Nếu muốn bấm Trade vẫn chuyển trang thì bỏ e.preventDefault()
-    // Hoặc giữ lại nếu Trade chỉ để mở menu
-    // e.preventDefault(); 
-    setIsTradeDropdownOpen((prev) => !prev);
-    setIsNetworkOpen(false);
-  };
 
   // Handle Click (Toggle) for Network button
   const handleNetworkClick = () => {
@@ -57,9 +45,6 @@ const Header: React.FC = () => {
   // Logic to close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (tradeRef.current && !tradeRef.current.contains(event.target as Node)) {
-        setIsTradeDropdownOpen(false);
-      }
       if (networkRef.current && !networkRef.current.contains(event.target as Node)) {
         setIsNetworkOpen(false);
       }
@@ -128,7 +113,6 @@ const Header: React.FC = () => {
         {/* 2. Navigation (Center) */}
         <nav className="nav-link-container" style={{ display: 'flex', justifyContent: 'center', gap: '15px' }}>
           {navLinks.map((link) => {
-            const isTradeButton = link.name === 'Trade';
             // Logic Active: Nếu đường dẫn hiện tại trùng với link.href
             const isActive = location.pathname === link.href;
             
@@ -137,21 +121,6 @@ const Header: React.FC = () => {
 
             // Class Highlight động
             const activeClass = isActive ? 'nav-link-highlight' : '';
-
-            if (isTradeButton) {
-              return (
-                <div key={link.name} ref={tradeRef} style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
-                  <Link 
-                    to={link.href} 
-                    onClick={handleTradeClick} 
-                    className={`nav-link ${activeClass}`} // Thêm class active động
-                  >
-                    {link.name}
-                  </Link>
-                  {isTradeDropdownOpen && <TradeDropdown />}
-                </div>
-              );
-            }
 
             if (isDisabledLink) {
               return (

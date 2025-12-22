@@ -1,6 +1,9 @@
+// src/components/TokenSelector.tsx
+
 import React, { useState } from 'react';
 import { COMMON_TOKENS, truncateAddress, isValidAddress } from '../utils/tokenUtils';
 import { useAccount } from 'wagmi';
+import { toast } from 'react-toastify'; // Import toast
 
 interface TokenInfo {
   name: string;
@@ -18,11 +21,8 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onTokenSelect, selectedTo
   const [customAddress, setCustomAddress] = useState('');
   const [isCustom, setIsCustom] = useState(false);
 
-  // Get token list corresponding to the blockchain
   const getTokensForChain = (): TokenInfo[] => {
     const chainName = chain?.name;
-    
-    // We accept normal string from tokenUtils initially
     let tokens: Record<string, string> = {}; 
 
     if (chainName?.includes('BSC') || chainName?.includes('BNB')) {
@@ -36,21 +36,30 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onTokenSelect, selectedTo
     return Object.entries(tokens).map(([symbol, address]) => ({
       name: symbol,
       symbol: symbol,
-      // Assert to TypeScript that this address is valid 0x
       address: address as `0x${string}`,
     }));
   };
 
   const handleCustomTokenAdd = () => {
-    // isValidAddress is a Type Guard, checks if address is valid
+    // Kiểm tra địa chỉ hợp lệ
     if (!isValidAddress(customAddress)) {
-      alert('Invalid address');
+      // Thay thế alert bằng toast.error
+      toast.error('❌ Invalid token address. Please check again.', {
+        position: "top-right",
+        autoClose: 3000,
+      });
       return;
     }
-    // Since isValidAddress checked it, we can safely cast
+
     onTokenSelect(customAddress as `0x${string}`);
     setCustomAddress('');
     setIsCustom(false);
+    
+    // Thông báo thành công
+    toast.success('✅ Custom token added successfully!', {
+      position: "top-right",
+      autoClose: 2000,
+    });
   };
 
   const tokens = getTokensForChain();
@@ -66,7 +75,6 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onTokenSelect, selectedTo
     >
       <h3 style={{ color: '#ffffff', marginBottom: '15px' }}>Select Token</h3>
 
-      {/* Popular Tokens List */}
       {!isCustom && (
         <>
           <div style={{ marginBottom: '15px' }}>
@@ -78,29 +86,20 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onTokenSelect, selectedTo
               {tokens.map((token) => (
                 <button
                   key={token.address}
-                  onClick={() => onTokenSelect(token.address)}
+                  onClick={() => {
+                    onTokenSelect(token.address);
+                    // Thông báo khi chọn token từ danh sách có sẵn
+                    toast.info(`Selected ${token.symbol}`, { position: "top-right", autoClose: 1000 });
+                  }}
                   style={{
                     padding: '12px',
-                    backgroundColor:
-                      selectedToken === token.address ? '#4ade80' : '#0f172a',
-                    color: selectedToken === token.address ? '#1e293b' : '#b8c0cc',
+                    backgroundColor: selectedToken === token.address ? '#3b82f6' : '#0f172a',
+                    color: 'white',
                     border: '1px solid #334155',
                     borderRadius: '8px',
                     cursor: 'pointer',
                     fontWeight: 'bold',
                     transition: 'all 0.2s',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (selectedToken !== token.address) {
-                      e.currentTarget.style.backgroundColor = '#334155';
-                      e.currentTarget.style.color = 'white';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (selectedToken !== token.address) {
-                      e.currentTarget.style.backgroundColor = '#0f172a';
-                      e.currentTarget.style.color = '#b8c0cc';
-                    }
                   }}
                 >
                   <div style={{ fontSize: '1.1rem', marginBottom: '5px' }}>
@@ -114,7 +113,6 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onTokenSelect, selectedTo
             </div>
           </div>
 
-          {/* Add Custom Token Button */}
           <button
             onClick={() => setIsCustom(true)}
             style={{
@@ -134,7 +132,6 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onTokenSelect, selectedTo
         </>
       )}
 
-      {/* Custom Token Form */}
       {isCustom && (
         <div
           style={{
@@ -170,8 +167,8 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({ onTokenSelect, selectedTo
               style={{
                 flex: 1,
                 padding: '10px',
-                backgroundColor: '#4ade80',
-                color: '#1e293b',
+                backgroundColor: '#3b82f6',
+                color: 'white',
                 border: 'none',
                 borderRadius: '8px',
                 cursor: 'pointer',

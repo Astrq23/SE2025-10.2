@@ -87,6 +87,19 @@ const TokenBalance: React.FC<TokenBalanceProps> = ({ tokenAddress, onTransfer })
         marginTop: '20px',
       }}
     >
+      {/* CSS ĐỂ XÓA MŨI TÊN INPUT NUMBER */}
+      <style>
+        {`
+          input::-webkit-outer-spin-button,
+          input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+          }
+          input[type=number] {
+            -moz-appearance: textfield;
+          }
+        `}
+      </style>
       {/* Token Info */}
       <div style={{ marginBottom: '20px' }}>
         <h3 style={{ color: '#ffffff', marginBottom: '10px' }}>

@@ -10,17 +10,17 @@ interface TradingChartProps {
   selectedCoin?: string;
 }
 
-// Map coin names to CoinGecko IDs
-const COIN_GECKO_IDS: Record<string, string> = {
-  'BTC': 'bitcoin',
-  'ETH': 'ethereum',
-  'BNB': 'binancecoin',
-  'SOL': 'solana',
-  'XRP': 'ripple',
-  'ADA': 'cardano',
-  'DOGE': 'dogecoin',
-  'BASE': 'base-protocol', // Check if this exists
-  'ARB': 'arbitrum',
+// Map coin names to Binance trading pairs
+const BINANCE_SYMBOLS: Record<string, string> = {
+  'BTC': 'BTCUSDT',
+  'ETH': 'ETHUSDT',
+  'BNB': 'BNBUSDT',
+  'SOL': 'SOLUSDT',
+  'XRP': 'XRPUSDT',
+  'ADA': 'ADAUSDT',
+  'DOGE': 'DOGEUSDT',
+  'BASE': 'BASEUSDT',
+  'ARB': 'ARBUSDT',
 };
 
 const TradingChart: React.FC<TradingChartProps> = ({ selectedCoin = 'BTC' }) => {
@@ -41,94 +41,84 @@ const TradingChart: React.FC<TradingChartProps> = ({ selectedCoin = 'BTC' }) => 
     const fetchPriceData = async () => {
       try {
         setLoading(true);
-        const coinId = COIN_GECKO_IDS[selectedCoin] || 'bitcoin';
+        const symbol = BINANCE_SYMBOLS[selectedCoin] || 'BTCUSDT';
         
-        // Determine days and interval based on timeframe
-        let days = 7;
+        // Determine interval based on timeframe
+        let interval = '1h'; // default
+        let limit = 24;
         
         if (timeframe === '1d') {
-          days = 1;
+          interval = '1m'; // 1 minute candles
+          limit = 1440; // 24 hours * 60 minutes
         } else if (timeframe === '7d') {
-          days = 7;
+          interval = '1h'; // 1 hour candles
+          limit = 168; // 7 days * 24 hours
         } else if (timeframe === '1m') {
-          days = 30;
+          interval = '4h'; // 4 hour candles
+          limit = 180; // 30 days * 6 periods per day
         } else if (timeframe === '1y') {
-          days = 365;
+          interval = '1d'; // 1 day candles
+          limit = 365; // 365 days
         } else if (timeframe === 'all') {
-          days = 'max' as any;
+          interval = '1w'; // 1 week candles
+          limit = 365; // ~7 years of data
         }
         
-        // Fetch current price
-        const currentPriceResponse = await fetch(
-          `https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=usd`
-        );
-        const currentPriceData = await currentPriceResponse.json();
-        const realTimePrice = currentPriceData[coinId]?.usd || 0;
-        
-        // Fetch price data for chart
+        // Fetch klines (candlestick) data from Binance
+        // API: https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=500
         const response = await fetch(
-          `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=${days}`
+          `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`
         );
         
-        if (!response.ok) throw new Error('Failed to fetch data');
+        if (!response.ok) throw new Error('Failed to fetch Binance data');
         
-        const data = await response.json();
-        const prices: [number, number][] = data.prices;
+        const klines = await response.json();
         
-        // For 1 day, interpolate to create 30-minute intervals
-        let processedPrices = prices;
-        if (timeframe === '1d') {
-          processedPrices = [];
-          for (let i = 0; i < prices.length - 1; i++) {
-            processedPrices.push(prices[i]);
-            
-            // Add interpolated point at 30-minute mark
-            const [timestamp1, price1] = prices[i];
-            const [timestamp2, price2] = prices[i + 1];
-            const midTimestamp = (timestamp1 + timestamp2) / 2;
-            const midPrice = (price1 + price2) / 2;
-            processedPrices.push([midTimestamp, midPrice]);
-          }
-          processedPrices.push(prices[prices.length - 1]);
-        }
+        // Extract closing prices from klines
+        // klines format: [openTime, open, high, low, close, volume, ...]
+        const prices: [number, number][] = klines.map((kline: any[]) => [
+          kline[0], // open time (timestamp)
+          parseFloat(kline[4]) // close price
+        ]);
         
-        // Limit to reasonable number of data points for display
-        const maxPoints = timeframe === '1d' ? 48 : timeframe === '7d' ? 20 : 30;
-        const step = Math.ceil(processedPrices.length / maxPoints);
+        // Fetch current price separately
+        const tickerResponse = await fetch(
+          `https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`
+        );
+        const tickerData = await tickerResponse.json();
+        const realTimePrice = parseFloat(tickerData.price);
         
         // Transform data for chart
-        const chartDataPoints: ChartDataPoint[] = processedPrices
-          .filter((_, index) => index % step === 0)
-          .map(([timestamp, price]) => {
-            const date = new Date(timestamp);
-            let timeLabel = '';
-            
-            if (timeframe === '1d') {
-              const hours = date.getHours();
-              const minutes = date.getMinutes();
-              timeLabel = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-            } else if (timeframe === '7d') {
-              const month = date.toLocaleString('en-US', { month: 'short' });
-              const day = date.getDate();
-              const hours = date.getHours();
-              timeLabel = `${month} ${day} ${hours}:00`;
-            } else {
-              const month = date.toLocaleString('en-US', { month: 'short' });
-              const day = date.getDate();
-              timeLabel = `${month} ${day}`;
-            }
-            
-            return {
-              time: timeLabel,
-              price: parseFloat(price.toFixed(2))
-            };
-          });
+        const chartDataPoints: ChartDataPoint[] = prices.map(([timestamp, price]) => {
+          const date = new Date(timestamp);
+          let timeLabel = '';
+          
+          if (timeframe === '1d') {
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
+            timeLabel = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+          } else if (timeframe === '7d') {
+            const month = date.toLocaleString('en-US', { month: 'short' });
+            const day = date.getDate();
+            const hours = date.getHours();
+            timeLabel = `${month} ${day} ${hours}:00`;
+          } else {
+            const month = date.toLocaleString('en-US', { month: 'short' });
+            const day = date.getDate();
+            timeLabel = `${month} ${day}`;
+          }
+          
+          return {
+            time: timeLabel,
+            price: parseFloat(price.toFixed(2))
+          };
+        });
         
         setChartData(chartDataPoints);
         setCurrentPrice(realTimePrice);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching price data:', error);
+        console.error('Error fetching Binance price data:', error);
         setLoading(false);
         generateMockData(selectedCoin);
       }
@@ -205,7 +195,7 @@ const TradingChart: React.FC<TradingChartProps> = ({ selectedCoin = 'BTC' }) => 
       <div style={{ marginBottom: '20px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
           <h3 style={{ color: '#facc15', fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>
-            {selectedCoin}/USD
+            {selectedCoin}/USDT
           </h3>
           <span style={{ color: '#b8c0cc', fontSize: '0.9rem' }}>
             {loading ? 'Loading...' : 'Real-time Chart'}
