@@ -72,3 +72,23 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Hiệu ứng trôi nhẹ nhàng */
+@keyframes twinkle {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+/* Thêm một lớp sương mù tím ở dưới đáy để tạo chiều sâu */
+.galaxy-bg::before {
+  content: "";
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(118, 69, 217, 0.2), transparent);
+  pointer-events: none;
+  z-index: -1;
+}

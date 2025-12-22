@@ -1,5 +1,4 @@
 // src/components/WalletLogin.tsx
-// PHIÊN BẢN MỚI: Đã loại bỏ backend, chỉ kết nối ví trực tiếp
 
 import React from 'react';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
@@ -10,7 +9,6 @@ const WalletLogin: React.FC = () => {
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
 
-  // Xử lý kết nối ví
   const handleLogin = () => {
     connect({ connector: injected() });
   };
@@ -18,51 +16,58 @@ const WalletLogin: React.FC = () => {
   // 1. Trạng thái ĐÃ ĐĂNG NHẬP
   if (isConnected && address) {
     return (
-      <div className="flex items-center gap-3 bg-slate-800/80 backdrop-blur px-4 py-2 rounded-xl border border-slate-700 shadow-sm">
-        {/* Chấm xanh online */}
-        <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.6)]"></div>
-        
-        <div className="flex flex-col">
-          {/* <span className="text-[10px] uppercase tracking-wider text-slate-400 font-bold">
-            Connected
-          </span> */}
-          <span className="text-sm font-mono font-bold text-white tracking-wide">
-            {/* {address.slice(0, 6)}...{address.slice(-4)} */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(30, 41, 59, 0.8)', padding: '8px 16px', borderRadius: '16px', border: '1px solid #334155', backdropFilter: 'blur(8px)' }}>
+        <div style={{ width: '10px', height: '10px', background: '#34d399', borderRadius: '50%', boxShadow: '0 0 8px #34d399' }}></div>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <span style={{ fontSize: '14px', fontFamily: 'monospace', fontWeight: 'bold', color: 'white' }}>
+             {address.slice(0, 6)}...{address.slice(-4)}
           </span>
         </div>
-
-        {/* Nút thoát */}
-        <button
-          onClick={() => disconnect()}
-          className="ml-1 text-slate-400 hover:text-red-400 hover:bg-red-500/10 p-0.5 rounded-lg transition-all"
-          title="Ngắt kết nối"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-            <polyline points="16 17 21 12 16 7"></polyline>
-            <line x1="21" y1="12" x2="9" y2="12"></line>
-          </svg>
+        <button onClick={() => disconnect()} style={{ marginLeft: '4px', background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }} title="Disconnect">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
         </button>
       </div>
     );
   }
 
-  // 2. Trạng thái CHƯA ĐĂNG NHẬP
+  // 2. Trạng thái CHƯA ĐĂNG NHẬP (DÙNG STYLE INLINE ĐỂ ÉP MÀU)
   return (
     <button
       onClick={handleLogin}
-      className="group relative px-4 py-2 font-bold text-white rounded-xl transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-indigo-500/25 overflow-hidden"
+      style={{
+        // STYLE INLINE - ĐỘ ƯU TIÊN CAO NHẤT
+        background: 'linear-gradient(90deg, #2563eb 0%, #7c3aed 100%)', // Blue -> Violet
+        color: 'white',
+        fontWeight: 'bold',
+        padding: '10px 24px',
+        borderRadius: '16px', // Bo tròn đẹp
+        border: 'none',
+        outline: 'none',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        boxShadow: '0 4px 14px 0 rgba(124, 58, 237, 0.3)', // Bóng màu tím
+        transition: 'transform 0.2s ease',
+        fontSize: '15px'
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translateY(-2px)';
+        e.currentTarget.style.background = 'linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%)'; // Sáng hơn khi hover
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'translateY(0)';
+        e.currentTarget.style.background = 'linear-gradient(90deg, #2563eb 0%, #7c3aed 100%)'; // Trả về màu cũ
+      }}
     >
-      {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all group-hover:from-indigo-500 group-hover:to-purple-500"></div>
+      {/* Icon Ví */}
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
+        <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" />
+        <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" />
+      </svg>
       
-      {/* Nội dung nút */}
-      <div className="relative flex items-center gap-2">
-        {/* <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>} */}
-        <span>Connect Wallet</span> 
-      </div>
+      <span>Connect Wallet</span> 
     </button>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom'; // Thêm useLocation
 
 import WalletLogin from './WalletLogin';
 import TradeDropdown from './TradeDropdown';
@@ -18,20 +18,22 @@ const NETWORKS = [
 ];
 
 // Navigation links
+// ĐÃ XÓA: isHighlight cứng (Để code tự xử lý)
 const navLinks = [
-  { name: 'Trade', href: '/trade', isHighlight: true },
-  { name: 'MintNFT', href: '/mint', isHighlight: false },
-  { name: 'Tokens', href: '/tokens', isHighlight: false },
-  { name: 'Earn', href: '/earn', isHighlight: false },
-  { name: '🔒 Staking', href: '/staking', isHighlight: false },
-  { name: '⇅ Swap', href: '/swap', isHighlight: false },
-  { name: '🎨 Marketplace', href: '/nft-marketplace', isHighlight: false }
+  { name: 'Trade', href: '/trade' },
+  { name: 'MintNFT', href: '/mint' },
+  { name: 'Tokens', href: '/tokens' },
+  { name: '⇅ Swap', href: '/swap' },
+  { name: 'Marketplace', href: '/nft-marketplace' }
 ];
 
 const Header: React.FC = () => {
   const [currentNetwork, setCurrentNetwork] = useState('BNB Chain');
   const [isNetworkOpen, setIsNetworkOpen] = useState(false);
   const [isTradeDropdownOpen, setIsTradeDropdownOpen] = useState(false);
+  
+  // Hook lấy đường dẫn hiện tại (Ví dụ: '/mint', '/trade'...)
+  const location = useLocation();
 
   // Refs to handle closing dropdown when clicking outside
   const tradeRef = React.useRef<HTMLDivElement>(null);
@@ -39,7 +41,9 @@ const Header: React.FC = () => {
 
   // Handle Click (Toggle) for Trade button
   const handleTradeClick = (e: React.MouseEvent) => {
-    e.preventDefault();
+    // Nếu muốn bấm Trade vẫn chuyển trang thì bỏ e.preventDefault()
+    // Hoặc giữ lại nếu Trade chỉ để mở menu
+    // e.preventDefault(); 
     setIsTradeDropdownOpen((prev) => !prev);
     setIsNetworkOpen(false);
   };
@@ -102,10 +106,10 @@ const Header: React.FC = () => {
       <div 
         className="header-inner" 
         style={{ 
-          width: '100%',          // Full width
-          maxWidth: '100%',       // No pixel limit
+          width: '100%',          
+          maxWidth: '100%',       
           margin: '0',
-          padding: '0 30px',      // Padding on both sides
+          padding: '0 30px',      
           display: 'flex', 
           justifyContent: 'space-between', 
           alignItems: 'center',
@@ -125,12 +129,23 @@ const Header: React.FC = () => {
         <nav className="nav-link-container" style={{ display: 'flex', justifyContent: 'center', gap: '15px' }}>
           {navLinks.map((link) => {
             const isTradeButton = link.name === 'Trade';
-            const isDisabledLink = link.name === 'Perps' || link.name === 'Earn';
+            // Logic Active: Nếu đường dẫn hiện tại trùng với link.href
+            const isActive = location.pathname === link.href;
+            
+            // Logic Disabled: (Hiện tại đang tắt)
+            const isDisabledLink = false;
+
+            // Class Highlight động
+            const activeClass = isActive ? 'nav-link-highlight' : '';
 
             if (isTradeButton) {
               return (
                 <div key={link.name} ref={tradeRef} style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
-                  <Link to={link.href} onClick={handleTradeClick} className={`nav-link ${link.isHighlight ? 'nav-link-highlight' : ''}`}>
+                  <Link 
+                    to={link.href} 
+                    onClick={handleTradeClick} 
+                    className={`nav-link ${activeClass}`} // Thêm class active động
+                  >
                     {link.name}
                   </Link>
                   {isTradeDropdownOpen && <TradeDropdown />}
@@ -140,19 +155,18 @@ const Header: React.FC = () => {
 
             if (isDisabledLink) {
               return (
-                <a key={link.name} href="#" onClick={handleDisabledLinkClick} className={`nav-link ${link.isHighlight ? 'nav-link-highlight' : ''} nav-link-disabled`} style={{ cursor: 'not-allowed', opacity: 0.6 }}>
+                <a key={link.name} href="#" onClick={handleDisabledLinkClick} className={`nav-link ${activeClass} nav-link-disabled`} style={{ cursor: 'not-allowed', opacity: 0.6 }}>
                   {link.name}
                 </a>
               );
             }
 
             return (
-              <Link key={link.name} to={link.href} className={`nav-link ${link.isHighlight ? 'nav-link-highlight' : ''}`}>
+              <Link key={link.name} to={link.href} className={`nav-link ${activeClass}`}>
                 {link.name}
               </Link>
             );
           })}
-          <button className="nav-link" style={{ padding: '8px' }}>•••</button>
         </nav>
 
         {/* 3. Wallet & Network (Right) */}

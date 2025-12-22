@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useAccount, useReadContract, useWriteContract } from 'wagmi';
+import { formatEther, parseEther } from 'viem';
 import { toast } from 'react-toastify';
 import TokenStakingArtifact from '../abis/TokenStaking.json';
 import { CONTRACT_ADDRESSES } from '../constants/addresses';
 
 const StakingDashboard: React.FC = () => {
   const { isConnected, address } = useAccount();
-  const [stakeAmount, setStakeAmount] = useState('');
-  const [unstakeAmount, setUnstakeAmount] = useState('');
+  const [activeTab, setActiveTab] = useState<'stake' | 'unstake'>('stake');
+  const [amount, setAmount] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  
   const [stakingInfo, setStakingInfo] = useState({
     stakedAmount: '0',
     availableRewards: '0',
@@ -17,10 +19,8 @@ const StakingDashboard: React.FC = () => {
 
   const contractAbi = TokenStakingArtifact.abi;
   const contractAddress = CONTRACT_ADDRESSES.localhost.STAKING as `0x${string}`;
-
   const { writeContractAsync } = useWriteContract();
 
-  // Đọc thông tin staking của user
   const { data: userStakingData, refetch: refetchStakingInfo } = useReadContract({
     address: contractAddress,
     abi: contractAbi,
@@ -29,405 +29,319 @@ const StakingDashboard: React.FC = () => {
     query: { enabled: !!address }
   });
 
-  // Cập nhật UI khi có data
   useEffect(() => {
     if (userStakingData && Array.isArray(userStakingData)) {
       setStakingInfo({
-        stakedAmount: (BigInt(userStakingData[0]?.toString() || 0) / BigInt(10 ** 18)).toString(),
-        availableRewards: (BigInt(userStakingData[1]?.toString() || 0) / BigInt(10 ** 18)).toString(),
-        totalRewardsEarned: (BigInt(userStakingData[2]?.toString() || 0) / BigInt(10 ** 18)).toString()
+        stakedAmount: formatEther(userStakingData[0]), 
+        availableRewards: formatEther(userStakingData[1]),
+        totalRewardsEarned: formatEther(userStakingData[2])
       });
     }
   }, [userStakingData]);
 
-  // Handle Stake
-  const handleStake = async () => {
-    if (!isConnected) {
-      toast.warn('Please connect your wallet');
-      return;
-    }
-
-    if (!stakeAmount || parseFloat(stakeAmount) <= 0) {
-      toast.error('Please enter a valid amount');
-      return;
-    }
+  const handleAction = async () => {
+    if (!isConnected) return toast.warn('Please connect wallet');
+    if (!amount || parseFloat(amount) <= 0) return toast.error('Enter valid amount');
 
     setIsLoading(true);
     try {
-      const amount = BigInt(parseFloat(stakeAmount) * 10 ** 18).toString();
+      const value = parseEther(amount); 
+      const functionName = activeTab === 'stake' ? 'stake' : 'unstake';
       
-      // Thực hiện approve trước (nếu cần)
-      // Sau đó gọi stake function
-
-      const tx = await writeContractAsync({
+      await writeContractAsync({
         address: contractAddress,
         abi: contractAbi,
-        functionName: 'stake',
-        args: [BigInt(amount)]
+        functionName: functionName,
+        args: [value]
       });
 
-      toast.success('Stake successful!');
-      setStakeAmount('');
+      toast.success(`${activeTab === 'stake' ? 'Deposit' : 'Withdraw'} successful!`);
+      setAmount('');
       refetchStakingInfo();
     } catch (error: any) {
-      toast.error(error?.message || 'Stake failed');
+      console.error(error);
+      toast.error('Transaction failed');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Handle Unstake
-  const handleUnstake = async () => {
-    if (!isConnected) {
-      toast.warn('Please connect your wallet');
-      return;
-    }
-
-    if (!unstakeAmount || parseFloat(unstakeAmount) <= 0) {
-      toast.error('Please enter a valid amount');
-      return;
-    }
-
+  const handleClaim = async () => {
+    if (!isConnected) return toast.warn('Connect wallet');
     setIsLoading(true);
     try {
-      const amount = BigInt(parseFloat(unstakeAmount) * 10 ** 18).toString();
-
-      const tx = await writeContractAsync({
-        address: contractAddress,
-        abi: contractAbi,
-        functionName: 'unstake',
-        args: [BigInt(amount)]
-      });
-
-      toast.success('Unstake successful!');
-      setUnstakeAmount('');
-      refetchStakingInfo();
-    } catch (error: any) {
-      toast.error(error?.message || 'Unstake failed');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Handle Claim Rewards
-  const handleClaimRewards = async () => {
-    if (!isConnected) {
-      toast.warn('Please connect your wallet');
-      return;
-    }
-
-    if (parseFloat(stakingInfo.availableRewards) <= 0) {
-      toast.warn('No rewards available');
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const tx = await writeContractAsync({
+      await writeContractAsync({
         address: contractAddress,
         abi: contractAbi,
         functionName: 'claimRewards'
       });
-
-      toast.success('Rewards claimed!');
+      toast.success('Claimed successfully!');
       refetchStakingInfo();
-    } catch (error: any) {
-      toast.error(error?.message || 'Claim failed');
+    } catch (error) {
+      toast.error('Claim failed');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Handle Unstake All
   const handleUnstakeAll = async () => {
-    if (!isConnected) {
-      toast.warn('Please connect your wallet');
-      return;
-    }
-
+    if (!isConnected) return toast.warn('Connect wallet');
     setIsLoading(true);
     try {
-      const tx = await writeContractAsync({
+      await writeContractAsync({
         address: contractAddress,
         abi: contractAbi,
         functionName: 'unstakeAll'
       });
-
-      toast.success('All tokens unstaked!');
+      toast.success('Unstaked All!');
       refetchStakingInfo();
-    } catch (error: any) {
-      toast.error(error?.message || 'Unstake all failed');
+    } catch (error) {
+      toast.error('Failed');
     } finally {
       setIsLoading(false);
     }
   };
 
+  // --- STYLES TINH CHỈNH ---
+  const glassCardStyle: React.CSSProperties = {
+    backgroundColor: 'rgba(30, 41, 59, 0.7)',
+    backdropFilter: 'blur(16px)',
+    borderRadius: '24px',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    padding: '30px',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+    // QUAN TRỌNG: Để 2 ô cao bằng nhau, ta dùng height 100% nhưng thêm flex column để nội dung dàn đều
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '14px',
+    fontSize: '1.1rem',
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    borderRadius: '12px',
+    color: 'white',
+    outline: 'none',
+    marginBottom: '10px'
+  };
+
+  // Info Row Style trong Transaction Summary
+  const infoRowStyle: React.CSSProperties = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '8px',
+    fontSize: '0.85rem',
+    color: '#cbd5e1'
+  };
+
   return (
-    <div style={{ 
-      maxWidth: '1200px', 
-      margin: '0 auto', 
-      padding: '40px 20px',
-      color: 'white'
-    }}>
+    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '20px 20px 80px', color: 'white' }}>
+      
       {/* Header */}
-      <div style={{ marginBottom: '40px' }}>
-        <h1 style={{ fontSize: '2.5rem', marginBottom: '10px', color: '#4ade80' }}>
-          Staking Dashboard
+      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+        <h1 style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '5px', background: '-webkit-linear-gradient(left, #4ade80, #3b82f6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          Staking Vault
         </h1>
-        <p style={{ fontSize: '1.1rem', color: '#b8c0cc' }}>
-          Stake your tokens and earn 12% APY
+        <p style={{ color: '#94a3b8', fontSize: '1.1rem' }}>
+          Passive Income Generator • <span style={{ color: '#4ade80', fontWeight: 'bold' }}>12% APY</span>
         </p>
       </div>
 
-      {/* Stats Grid */}
-      <div style={{ 
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-        gap: '20px',
-        marginBottom: '40px'
-      }}>
-        {/* Staked Amount */}
-        <div style={{
-          backgroundColor: '#1e293b',
-          padding: '20px',
-          borderRadius: '12px',
-          border: '1px solid #334155'
-        }}>
-          <p style={{ color: '#b8c0cc', marginBottom: '10px' }}>Staked Amount</p>
-          <p style={{ fontSize: '1.8rem', color: '#4ade80', fontWeight: 'bold' }}>
-            {stakingInfo.stakedAmount}
-          </p>
-          <p style={{ color: '#88909c', fontSize: '0.9rem' }}>Tokens</p>
-        </div>
+      {/* Grid Layout */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '30px', alignItems: 'stretch' }}>
+        
+        {/* === CARD 1: PORTFOLIO === */}
+        <div style={glassCardStyle}>
+          {/* Top Section */}
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px', margin: 0 }}>
+                  
+                  My Portfolio
+                </h3>
+                <div style={{ background: 'rgba(255,255,255,0.1)', padding: '4px 10px', borderRadius: '20px', fontSize: '0.8rem', color: '#94a3b8' }}>
+                Live
+                </div>
+            </div>
 
-        {/* Available Rewards */}
-        <div style={{
-          backgroundColor: '#1e293b',
-          padding: '20px',
-          borderRadius: '12px',
-          border: '1px solid #334155'
-        }}>
-          <p style={{ color: '#b8c0cc', marginBottom: '10px' }}>Available Rewards</p>
-          <p style={{ fontSize: '1.8rem', color: '#facc15', fontWeight: 'bold' }}>
-            {parseFloat(stakingInfo.availableRewards).toFixed(4)}
-          </p>
-          <p style={{ color: '#88909c', fontSize: '0.9rem' }}>Ready to Claim</p>
-        </div>
+            <div style={{ marginBottom: '20px', padding: '15px', background: 'rgba(0,0,0,0.2)', borderRadius: '16px' }}>
+                <p style={{ color: '#94a3b8', textTransform: 'uppercase', fontSize: '0.75rem', fontWeight: 'bold', letterSpacing: '1px', marginBottom: '5px' }}>Total Staked Balance</p>
+                <div style={{ fontSize: '3rem', fontWeight: 'bold', color: 'white', lineHeight: '1' }}>
+                {parseFloat(stakingInfo.stakedAmount).toFixed(2)}
+                <span style={{ fontSize: '1rem', color: '#64748b', marginLeft: '10px', fontWeight: 'normal' }}>TOKEN</span>
+                </div>
+            </div>
 
-        {/* Total Rewards */}
-        <div style={{
-          backgroundColor: '#1e293b',
-          padding: '20px',
-          borderRadius: '12px',
-          border: '1px solid #334155'
-        }}>
-          <p style={{ color: '#b8c0cc', marginBottom: '10px' }}>Total Rewards Earned</p>
-          <p style={{ fontSize: '1.8rem', color: '#60a5fa', fontWeight: 'bold' }}>
-            {parseFloat(stakingInfo.totalRewardsEarned).toFixed(4)}
-          </p>
-          <p style={{ color: '#88909c', fontSize: '0.9rem' }}>All Time</p>
-        </div>
-
-        {/* APY */}
-        <div style={{
-          backgroundColor: '#1e293b',
-          padding: '20px',
-          borderRadius: '12px',
-          border: '1px solid #334155'
-        }}>
-          <p style={{ color: '#b8c0cc', marginBottom: '10px' }}>APY Rate</p>
-          <p style={{ fontSize: '1.8rem', color: '#10b981', fontWeight: 'bold' }}>
-            12%
-          </p>
-          <p style={{ color: '#88909c', fontSize: '0.9rem' }}>Per Year</p>
-        </div>
-      </div>
-
-      {/* Actions Grid */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: '30px'
-      }}>
-        {/* Stake Card */}
-        <div style={{
-          backgroundColor: '#1e293b',
-          padding: '30px',
-          borderRadius: '16px',
-          border: '1px solid #334155'
-        }}>
-          <h3 style={{ color: '#facc15', marginBottom: '20px', fontSize: '1.3rem' }}>
-            🔒 Stake Tokens
-          </h3>
-          
-          <input
-            type="number"
-            placeholder="Enter amount"
-            value={stakeAmount}
-            onChange={(e) => setStakeAmount(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '12px',
-              marginBottom: '15px',
-              backgroundColor: '#0f172a',
-              border: '1px solid #334155',
-              borderRadius: '8px',
-              color: 'white',
-              fontSize: '1rem'
-            }}
-          />
-
-          <button
-            onClick={handleStake}
-            disabled={isLoading || !isConnected}
-            style={{
-              width: '100%',
-              padding: '12px',
-              backgroundColor: '#4ade80',
-              color: 'black',
-              border: 'none',
-              borderRadius: '8px',
-              fontWeight: 'bold',
-              cursor: isLoading || !isConnected ? 'not-allowed' : 'pointer',
-              opacity: isLoading || !isConnected ? 0.5 : 1,
-              fontSize: '1rem'
-            }}
-          >
-            {isLoading ? 'Processing...' : 'Stake Now'}
-          </button>
-        </div>
-
-        {/* Unstake Card */}
-        <div style={{
-          backgroundColor: '#1e293b',
-          padding: '30px',
-          borderRadius: '16px',
-          border: '1px solid #334155'
-        }}>
-          <h3 style={{ color: '#facc15', marginBottom: '20px', fontSize: '1.3rem' }}>
-            📤 Unstake Tokens
-          </h3>
-          
-          <input
-            type="number"
-            placeholder="Enter amount"
-            value={unstakeAmount}
-            onChange={(e) => setUnstakeAmount(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '12px',
-              marginBottom: '15px',
-              backgroundColor: '#0f172a',
-              border: '1px solid #334155',
-              borderRadius: '8px',
-              color: 'white',
-              fontSize: '1rem'
-            }}
-          />
-
-          <button
-            onClick={handleUnstake}
-            disabled={isLoading || !isConnected}
-            style={{
-              width: '100%',
-              padding: '12px',
-              backgroundColor: '#f59e0b',
-              color: 'black',
-              border: 'none',
-              borderRadius: '8px',
-              fontWeight: 'bold',
-              cursor: isLoading || !isConnected ? 'not-allowed' : 'pointer',
-              opacity: isLoading || !isConnected ? 0.5 : 1,
-              marginBottom: '10px',
-              fontSize: '1rem'
-            }}
-          >
-            {isLoading ? 'Processing...' : 'Unstake'}
-          </button>
-
-          <button
-            onClick={handleUnstakeAll}
-            disabled={isLoading || !isConnected}
-            style={{
-              width: '100%',
-              padding: '12px',
-              backgroundColor: '#ef4444',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              fontWeight: 'bold',
-              cursor: isLoading || !isConnected ? 'not-allowed' : 'pointer',
-              opacity: isLoading || !isConnected ? 0.5 : 1,
-              fontSize: '0.9rem'
-            }}
-          >
-            Unstake All
-          </button>
-        </div>
-
-        {/* Claim Rewards Card */}
-        <div style={{
-          backgroundColor: '#1e293b',
-          padding: '30px',
-          borderRadius: '16px',
-          border: '1px solid #334155'
-        }}>
-          <h3 style={{ color: '#facc15', marginBottom: '20px', fontSize: '1.3rem' }}>
-            🎁 Claim Rewards
-          </h3>
-          
-          <div style={{
-            backgroundColor: '#0f172a',
-            padding: '15px',
-            borderRadius: '8px',
-            marginBottom: '15px',
-            textAlign: 'center'
-          }}>
-            <p style={{ color: '#b8c0cc', fontSize: '0.9rem', marginBottom: '5px' }}>
-              Claimable Rewards
-            </p>
-            <p style={{ fontSize: '1.5rem', color: '#10b981', fontWeight: 'bold' }}>
-              {parseFloat(stakingInfo.availableRewards).toFixed(4)}
-            </p>
+            <div style={{ 
+                background: 'rgba(16, 185, 129, 0.08)', 
+                border: '1px solid rgba(16, 185, 129, 0.2)', 
+                borderRadius: '16px', 
+                padding: '15px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '20px'
+            }}>
+                <div>
+                <p style={{ color: '#4ade80', fontSize: '0.75rem', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '2px' }}>Unclaimed Rewards</p>
+                <p style={{ fontSize: '1.6rem', fontWeight: 'bold', color: '#4ade80', margin: 0 }}>
+                    {parseFloat(stakingInfo.availableRewards).toFixed(6)}
+                </p>
+                </div>
+                <button 
+                onClick={handleClaim}
+                disabled={isLoading || parseFloat(stakingInfo.availableRewards) <= 0}
+                style={{
+                    padding: '8px 20px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    background: '#10b981',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    cursor: parseFloat(stakingInfo.availableRewards) > 0 ? 'pointer' : 'not-allowed',
+                    opacity: parseFloat(stakingInfo.availableRewards) > 0 ? 1 : 0.6,
+                    fontSize: '0.9rem'
+                }}
+                >
+                Claim
+                </button>
+            </div>
           </div>
+          
+          {/* Spacer để đẩy footer xuống đáy nếu cần */}
+          <div style={{ flexGrow: 1 }}></div>
 
-          <button
-            onClick={handleClaimRewards}
-            disabled={isLoading || !isConnected || parseFloat(stakingInfo.availableRewards) <= 0}
-            style={{
-              width: '100%',
-              padding: '12px',
-              backgroundColor: '#10b981',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              fontWeight: 'bold',
-              cursor: isLoading || !isConnected || parseFloat(stakingInfo.availableRewards) <= 0 ? 'not-allowed' : 'pointer',
-              opacity: isLoading || !isConnected || parseFloat(stakingInfo.availableRewards) <= 0 ? 0.5 : 1,
-              fontSize: '1rem'
-            }}
-          >
-            {isLoading ? 'Processing...' : 'Claim Rewards'}
-          </button>
+          {/* Footer Stats */}
+          <div style={{ display: 'flex', gap: '15px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '15px', marginTop: 'auto' }}>
+            <div style={{ flex: 1 }}>
+              <p style={{ color: '#64748b', fontSize: '0.75rem' }}>Lifetime Earned</p>
+              <p style={{ color: '#60a5fa', fontWeight: 'bold', fontSize: '1.1rem' }}>{parseFloat(stakingInfo.totalRewardsEarned).toFixed(2)}</p>
+            </div>
+            <div style={{ flex: 1, borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '15px' }}>
+              <p style={{ color: '#64748b', fontSize: '0.75rem' }}>Fixed APY</p>
+              <p style={{ color: '#facc15', fontWeight: 'bold', fontSize: '1.1rem' }}>12.0%</p>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Info Section */}
-      <div style={{
-        marginTop: '40px',
-        padding: '30px',
-        backgroundColor: '#1e293b',
-        borderRadius: '16px',
-        border: '1px solid #334155'
-      }}>
-        <h3 style={{ color: '#facc15', marginBottom: '20px' }}>ℹ️ How Staking Works</h3>
-        <ul style={{ color: '#b8c0cc', lineHeight: '1.8' }}>
-          <li>📌 Stake your tokens to earn 12% APY (Annual Percentage Yield)</li>
-          <li>💰 Rewards are calculated daily based on your staked amount</li>
-          <li>🎁 Claim your rewards anytime without unstaking</li>
-          <li>📤 Unstake your tokens whenever you want with no lock-in period</li>
-          <li>⚡ All transactions are instant and secured by the blockchain</li>
-        </ul>
+        {/* === CARD 2: ACTION PANEL === */}
+        <div style={glassCardStyle}>
+            {/* Top Section */}
+            <div>
+                {/* Tabs */}
+                <div style={{ display: 'flex', background: 'rgba(15, 23, 42, 0.6)', borderRadius: '10px', padding: '3px', marginBottom: '20px' }}>
+                    <button 
+                    onClick={() => setActiveTab('stake')}
+                    style={{
+                        flex: 1, padding: '10px', borderRadius: '8px', border: 'none',
+                        background: activeTab === 'stake' ? '#334155' : 'transparent',
+                        color: activeTab === 'stake' ? 'white' : '#94a3b8',
+                        fontWeight: 'bold', fontSize: '0.9rem', cursor: 'pointer', transition: 'all 0.2s'
+                    }}
+                    >
+                    Deposit
+                    </button>
+                    <button 
+                    onClick={() => setActiveTab('unstake')}
+                    style={{
+                        flex: 1, padding: '10px', borderRadius: '8px', border: 'none',
+                        background: activeTab === 'unstake' ? '#334155' : 'transparent',
+                        color: activeTab === 'unstake' ? 'white' : '#94a3b8',
+                        fontWeight: 'bold', fontSize: '0.9rem', cursor: 'pointer', transition: 'all 0.2s'
+                    }}
+                    >
+                    Withdraw
+                    </button>
+                </div>
+
+                <h3 style={{ fontSize: '1rem', marginBottom: '10px', color: '#cbd5e1' }}>
+                    {activeTab === 'stake' ? 'Amount to Stake' : 'Amount to Withdraw'}
+                </h3>
+
+                <div style={{ position: 'relative', marginBottom: '20px' }}>
+                    <input 
+                    type="number" 
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder="0.00"
+                    style={inputStyle}
+                    />
+                    <span style={{ position: 'absolute', right: '15px', top: '16px', fontWeight: 'bold', color: '#64748b', fontSize: '0.8rem' }}>TOKEN</span>
+                    
+                    <div style={{ textAlign: 'right', fontSize: '0.8rem', color: '#64748b' }}>
+                    Available: <span style={{ color: '#3b82f6', cursor: 'pointer' }}>MAX</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Spacer: Đẩy phần dưới xuống */}
+            <div style={{ flexGrow: 1 }}></div>
+
+            {/* Middle: Transaction Summary (ĐÂY LÀ PHẦN MỚI THÊM ĐỂ CÂN ĐỐI) */}
+            <div style={{ 
+                background: 'rgba(0, 0, 0, 0.2)', 
+                borderRadius: '12px', 
+                padding: '15px', 
+                marginBottom: '20px',
+                border: '1px solid rgba(255,255,255,0.05)'
+            }}>
+                <div style={infoRowStyle}>
+                    <span>Exchange Rate</span>
+                    <span style={{ color: 'white', fontWeight: 'bold' }}>1 TOKEN = 1 stTOKEN</span>
+                </div>
+                <div style={infoRowStyle}>
+                    <span>Est. Gas Fee</span>
+                    <span style={{ color: 'white', fontWeight: 'bold' }}>~0.002 BNB</span>
+                </div>
+                <div style={infoRowStyle}>
+                    <span>Unlock Period</span>
+                    <span style={{ color: '#4ade80', fontWeight: 'bold' }}>Instant</span>
+                </div>
+                <div style={{ borderTop: '1px dashed rgba(255,255,255,0.1)', marginTop: '8px', paddingTop: '8px', ...infoRowStyle, marginBottom: 0 }}>
+                    <span>You will receive</span>
+                    <span style={{ color: 'white', fontWeight: 'bold' }}>{amount || '0'} stTOKEN</span>
+                </div>
+            </div>
+
+            {/* Bottom: Action Button */}
+            <div>
+                <button 
+                    onClick={handleAction}
+                    disabled={isLoading || !isConnected}
+                    style={{
+                    width: '100%',
+                    padding: '14px',
+                    fontSize: '1rem',
+                    fontWeight: 'bold',
+                    borderRadius: '10px',
+                    border: 'none',
+                    cursor: isLoading || !isConnected ? 'not-allowed' : 'pointer',
+                    transition: 'all 0.2s',
+                    background: activeTab === 'stake' 
+                        ? 'linear-gradient(90deg, #2563eb, #06b6d4)' 
+                        : 'linear-gradient(90deg, #ea580c, #dc2626)', 
+                    color: 'white',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                    opacity: isLoading || !isConnected ? 0.6 : 1
+                    }}
+                >
+                    {isLoading ? 'Processing...' : (activeTab === 'stake' ? 'Confirm Deposit' : 'Confirm Withdraw')}
+                </button>
+                
+                {activeTab === 'unstake' && (
+                    <p 
+                    onClick={handleUnstakeAll} 
+                    style={{ textAlign: 'center', marginTop: '15px', color: '#94a3b8', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.8rem' }}
+                    >
+                    Unstake All Assets
+                    </p>
+                )}
+            </div>
+        </div>
+
       </div>
     </div>
   );

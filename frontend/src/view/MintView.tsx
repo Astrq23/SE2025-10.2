@@ -1,126 +1,77 @@
-// D:\cnpm\my-defi-app/src/view/MintView.tsx
-
 import React from 'react';
 import MintingBox from '../components/MintingBox';
 import AppPagination from '../components/AppPagination';
-import FeaturesSection from '../components/FeaturesSection';
 
 const MintView: React.FC = () => {
     return (
-        // Main Container: Full width 100%
-        <div className="min-h-screen bg-defi-bg text-white" style={{ width: '100%', boxSizing: 'border-box' }}>
+        // CONTAINER CHÍNH
+        <div style={{ position: 'relative', minHeight: '100vh', color: 'white' }}>
+            
+            {/* 1. BACKGROUND IMAGE (CỐ ĐỊNH) */}
+            {/* Dùng thẻ img với position fixed để làm hình nền không bị trôi */}
+            <img
+                src="/nft.jpg" 
+                alt="NFT Background"
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    zIndex: -1, // Đẩy xuống dưới cùng
+                }}
+            />
+
+            {/* 2. LỚP PHỦ TỐI (OVERLAY) */}
+            {/* Giúp làm tối hình nền để nội dung phía trên dễ đọc hơn */}
             <div
                 style={{
-                    width: '100%',          // Required 100%
-                    maxWidth: '100%',       // Remove old limit
-                    margin: '0',
-                    // --- CHANGED HERE: Use % instead of fixed px ---
-                    padding: '40px 8%',     // Left/Right 8% for breathing room
-                    // -----------------------------------------------
-                    boxSizing: 'border-box',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center'    // Center content inside
-                }}
-            >
-                {/* Title Section */}
-                <div style={{ textAlign: 'center', marginBottom: '50px', maxWidth: '800px' }}>
-                    <h1 style={{ color: '#facc15', fontSize: '3rem', marginBottom: '20px', fontWeight: 'bold' }}>
-                        NFT Minting Station
-                    </h1>
-                    <p style={{ color: '#b8c0cc', fontSize: '1.3rem' }}>
-                        Create and own unique NFTs on the blockchain. Mint your NFTs quickly, securely, and seamlessly.
-                    </p>
-                </div>
-
-                {/* Minting Box Area */}
-                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
                     width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    marginBottom: '80px'
-                }}>
-                    <MintingBox />
-                </div>
+                    height: '100%',
+                    backgroundColor: 'rgba(15, 23, 42, 0.85)', // Màu Slate-900 độ mờ 85%
+                    zIndex: -1,
+                }}
+            ></div>
 
-                {/* Detailed Info: Full Width Grid Layout */}
+            {/* 3. NỘI DUNG CHÍNH (NỔI LÊN TRÊN) */}
+            <div style={{ position: 'relative', zIndex: 10, width: '100%', boxSizing: 'border-box' }}>
                 <div
                     style={{
-                        padding: '40px',
-                        backgroundColor: '#1e293b',
-                        borderRadius: '20px',
-                        border: '1px solid #334155',
-                        width: '100%',       // Occupy full parent width
-                        boxSizing: 'border-box'
+                        maxWidth: '1200px',
+                        margin: '0 auto',
+                        padding: '60px 20px 80px',
                     }}
                 >
-                    <h2 style={{ color: '#facc15', fontSize: '2rem', marginBottom: '40px', textAlign: 'center' }}>
-                        About NFT Minting
-                    </h2>
+                    {/* Title Section */}
+                    <div className="text-center mb-16">
+                        <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 drop-shadow-sm">
+                            NFT Minting Station
+                        </h1>
+                        <p className="text-slate-300 text-lg max-w-2xl mx-auto leading-relaxed">
+                            Create, collect, and own unique digital assets on the blockchain. 
+                            Start your NFT journey instantly.
+                        </p>
+                    </div>
 
-                    <div style={{ 
-                        display: 'grid', 
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', // Flexible columns
-                        gap: '40px' 
-                    }}>
-                        {/* Item 1 */}
-                        <div>
-                            <h3 style={{ color: '#4ade80', marginBottom: '15px', fontSize: '1.2rem', fontWeight: 'bold' }}>
-                                🎨 Create Unique NFTs
-                            </h3>
-                            <p style={{ color: '#b8c0cc', lineHeight: '1.6' }}>
-                                Mint NFTs with custom designs and metadata. Each NFT is unique and can represent art, collectibles, or digital assets.
-                            </p>
-                        </div>
-
-                        {/* Item 2 */}
-                        <div>
-                            <h3 style={{ color: '#4ade80', marginBottom: '15px', fontSize: '1.2rem', fontWeight: 'bold' }}>
-                                ⚡ Fast Minting
-                            </h3>
-                            <p style={{ color: '#b8c0cc', lineHeight: '1.6' }}>
-                                Minting transactions are processed quickly on the blockchain with optimized gas fees and instant confirmation.
-                            </p>
-                        </div>
-
-                        {/* Item 3 */}
-                        <div>
-                            <h3 style={{ color: '#4ade80', marginBottom: '15px', fontSize: '1.2rem', fontWeight: 'bold' }}>
-                                🔒 Permanent Ownership
-                            </h3>
-                            <p style={{ color: '#b8c0cc', lineHeight: '1.6' }}>
-                                Your NFTs are securely stored on the blockchain, immutable and unerasable by anyone.
-                            </p>
-                        </div>
-
-                        {/* Item 4 */}
-                        <div>
-                            <h3 style={{ color: '#4ade80', marginBottom: '15px', fontSize: '1.2rem', fontWeight: 'bold' }}>
-                                🌐 Multi-Chain Support
-                            </h3>
-                            <p style={{ color: '#b8c0cc', lineHeight: '1.6' }}>
-                                Mint NFTs on various blockchains such as BNB Chain, Ethereum, and Layer 2 networks.
-                            </p>
+                    {/* Minting Box Area */}
+                    <div className="flex justify-center mb-12 relative">
+                        {/* Hiệu ứng Glow nhẹ phía sau box */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg h-64 bg-purple-600/30 rounded-full blur-[80px] pointer-events-none"></div>
+                        
+                        <div className="relative z-10 w-full max-w-xl">
+                            <MintingBox />
                         </div>
                     </div>
+
+                    {/* Pagination */}
+                    <div className="flex justify-center mt-12">
+                        <AppPagination />
+                    </div>
                 </div>
-            </div>
-
-            {/* Pagination */}
-            <div
-                style={{
-                    width: '100%',
-                    padding: '0 0 60px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                }}
-            >
-                <AppPagination />
-            </div>
-
-             {/* Footer Features: Updated padding to 8% to match */}
-             <div style={{ width: '100%', padding: '0 8%', boxSizing: 'border-box' }}>
-                <FeaturesSection />
             </div>
         </div>
     );
