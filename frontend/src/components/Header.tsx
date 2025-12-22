@@ -23,7 +23,7 @@ const navLinks = [
   { name: 'Trade', href: '/trade' },
   { name: 'MintNFT', href: '/mint' },
   { name: 'Tokens', href: '/tokens' },
-  { name: '⇅ Swap', href: '/swap' },
+  { name: 'Swap', href: '/swap' },
   { name: 'Marketplace', href: '/nft-marketplace' }
 ];
 

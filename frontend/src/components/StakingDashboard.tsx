@@ -293,10 +293,6 @@ const StakingDashboard: React.FC = () => {
                     <span style={{ color: 'white', fontWeight: 'bold' }}>1 TOKEN = 1 stTOKEN</span>
                 </div>
                 <div style={infoRowStyle}>
-                    <span>Est. Gas Fee</span>
-                    <span style={{ color: 'white', fontWeight: 'bold' }}>~0.002 BNB</span>
-                </div>
-                <div style={infoRowStyle}>
                     <span>Unlock Period</span>
                     <span style={{ color: '#4ade80', fontWeight: 'bold' }}>Instant</span>
                 </div>

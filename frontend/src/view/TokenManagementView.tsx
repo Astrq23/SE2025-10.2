@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import TokenSelector from '../components/TokenSelector';
 import TokenBalance from '../components/TokenBalance';
+import { toast } from 'react-toastify';
 
 const TokenManagementView: React.FC = () => {
   const [selectedToken, setSelectedToken] = useState<`0x${string}` | undefined>();
@@ -11,7 +12,7 @@ const TokenManagementView: React.FC = () => {
 
   const handleTransfer = (to: string, amount: string) => {
     console.log(`Transfer ${amount} to ${to}`);
-    alert(`Transferred ${amount} tokens to ${to}`);
+    toast.success(`✓ Transferred ${amount} tokens to ${to}`);
   };
 
   return (

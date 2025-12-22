@@ -308,8 +308,7 @@ const NFTMarketplace: React.FC = () => {
         </div>
       )}
 
-      {/* Info Section */}
-      <div style={{
+      {/* <div style={{
         marginTop: '40px',
         padding: '30px',
         backgroundColor: '#1e293b',
@@ -324,7 +323,7 @@ const NFTMarketplace: React.FC = () => {
           <li>🎨 You can list your own NFTs for sale</li>
           <li>📜 View complete transaction history</li>
         </ul>
-      </div>
+      </div> */}
     </div>
   );
 };
