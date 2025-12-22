@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useWriteContract, useReadContract } from 'wagmi';
-import { erc20Abi, parseUnits } from 'viem';
+import { parseUnits } from 'viem';
+import { ERC20_ABI } from '../utils/erc20Abi';
 import TokenStakingArtifact from '../abis/TokenStaking.json';
 import { CONTRACT_ADDRESSES } from '../constants/addresses';
 
@@ -46,7 +47,7 @@ export const useStaking = () => {
       try {
         const approveHash = await writeContractAsync({
           address: tokenAddress,
-          abi: erc20Abi,
+          abi: ERC20_ABI as any,
           functionName: 'approve',
           args: [contractAddress, amountWei]
         });

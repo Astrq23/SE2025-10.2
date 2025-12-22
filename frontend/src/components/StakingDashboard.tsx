@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useAccount, useReadContract, useWriteContract } from 'wagmi';
-import { formatEther, parseEther } from 'viem';
+import { useAccount, useReadContract } from 'wagmi';
+import { formatEther } from 'viem';
 import { toast } from 'react-toastify';
 import TokenStakingArtifact from '../abis/TokenStaking.json';
 import { CONTRACT_ADDRESSES } from '../constants/addresses';
+import useStaking from '../hooks/useStaking';
 
 const StakingDashboard: React.FC = () => {
   const { isConnected, address } = useAccount();
   const [activeTab, setActiveTab] = useState<'stake' | 'unstake'>('stake');
   const [amount, setAmount] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   
   const [stakingInfo, setStakingInfo] = useState({
     stakedAmount: '0',
@@ -19,7 +19,7 @@ const StakingDashboard: React.FC = () => {
 
   const contractAbi = TokenStakingArtifact.abi;
   const contractAddress = CONTRACT_ADDRESSES.localhost.STAKING as `0x${string}`;
-  const { writeContractAsync } = useWriteContract();
+  const { stake, unstake, unstakeAll, claimRewards, isLoading: stakingLoading, error: stakingError } = useStaking();
 
   const { data: userStakingData, refetch: refetchStakingInfo } = useReadContract({
     address: contractAddress,
@@ -43,62 +43,43 @@ const StakingDashboard: React.FC = () => {
     if (!isConnected) return toast.warn('Please connect wallet');
     if (!amount || parseFloat(amount) <= 0) return toast.error('Enter valid amount');
 
-    setIsLoading(true);
     try {
-      const value = parseEther(amount); 
-      const functionName = activeTab === 'stake' ? 'stake' : 'unstake';
-      
-      await writeContractAsync({
-        address: contractAddress,
-        abi: contractAbi,
-        functionName: functionName,
-        args: [value]
-      });
-
-      toast.success(`${activeTab === 'stake' ? 'Deposit' : 'Withdraw'} successful!`);
+      if (activeTab === 'stake') {
+        await stake(amount);
+        toast.success('Deposit successful!');
+      } else {
+        await unstake(amount);
+        toast.success('Withdraw successful!');
+      }
       setAmount('');
       refetchStakingInfo();
     } catch (error: any) {
       console.error(error);
-      toast.error('Transaction failed');
-    } finally {
-      setIsLoading(false);
+      toast.error(error?.message || 'Transaction failed');
     }
   };
 
   const handleClaim = async () => {
     if (!isConnected) return toast.warn('Connect wallet');
-    setIsLoading(true);
     try {
-      await writeContractAsync({
-        address: contractAddress,
-        abi: contractAbi,
-        functionName: 'claimRewards'
-      });
+      await claimRewards();
       toast.success('Claimed successfully!');
       refetchStakingInfo();
-    } catch (error) {
-      toast.error('Claim failed');
-    } finally {
-      setIsLoading(false);
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error?.message || 'Claim failed');
     }
   };
 
   const handleUnstakeAll = async () => {
     if (!isConnected) return toast.warn('Connect wallet');
-    setIsLoading(true);
     try {
-      await writeContractAsync({
-        address: contractAddress,
-        abi: contractAbi,
-        functionName: 'unstakeAll'
-      });
+      await unstakeAll();
       toast.success('Unstaked All!');
       refetchStakingInfo();
-    } catch (error) {
-      toast.error('Failed');
-    } finally {
-      setIsLoading(false);
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error?.message || 'Failed');
     }
   };
 
@@ -206,7 +187,7 @@ const StakingDashboard: React.FC = () => {
                 </div>
                 <button 
                 onClick={handleClaim}
-                disabled={isLoading || parseFloat(stakingInfo.availableRewards) <= 0}
+                disabled={stakingLoading || parseFloat(stakingInfo.availableRewards) <= 0}
                 style={{
                     padding: '8px 20px',
                     borderRadius: '8px',
@@ -319,7 +300,7 @@ const StakingDashboard: React.FC = () => {
             <div>
                 <button 
                     onClick={handleAction}
-                    disabled={isLoading || !isConnected}
+                  disabled={stakingLoading || !isConnected}
                     style={{
                     width: '100%',
                     padding: '14px',
@@ -327,17 +308,17 @@ const StakingDashboard: React.FC = () => {
                     fontWeight: 'bold',
                     borderRadius: '10px',
                     border: 'none',
-                    cursor: isLoading || !isConnected ? 'not-allowed' : 'pointer',
+                    cursor: stakingLoading || !isConnected ? 'not-allowed' : 'pointer',
                     transition: 'all 0.2s',
                     background: activeTab === 'stake' 
                         ? 'linear-gradient(90deg, #2563eb, #06b6d4)' 
                         : 'linear-gradient(90deg, #ea580c, #dc2626)', 
                     color: 'white',
                     boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                    opacity: isLoading || !isConnected ? 0.6 : 1
+                    opacity: stakingLoading || !isConnected ? 0.6 : 1
                     }}
                 >
-                    {isLoading ? 'Processing...' : (activeTab === 'stake' ? 'Confirm Deposit' : 'Confirm Withdraw')}
+                    {stakingLoading ? 'Processing...' : (activeTab === 'stake' ? 'Confirm Deposit' : 'Confirm Withdraw')}
                 </button>
                 
                 {activeTab === 'unstake' && (
