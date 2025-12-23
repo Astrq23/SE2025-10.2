@@ -51,3 +51,4 @@ export const getNetworkConfig = (chainId?: number) => {
   
   return CONTRACT_ADDRESSES[networkMap[chainId] || 'localhost'];
 };
+
