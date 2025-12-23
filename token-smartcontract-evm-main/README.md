@@ -1,11 +1,10 @@
-<<<<<<< HEAD
-# Inferix Token Contracts
+# Zenith Token Contracts
 
-This repository contains the smart contracts of tokens, including tokens for the **Testnet phase** of the [Inferix](https://inferix.io/) project. These contracts enable users to interact with the EVM Testnet environment and test a simple ERC20 token implementation.
+This repository contains the smart contracts of tokens, including tokens for the **Testnet phase** of the [Zenith](https://astrq23.github.io/SE2025-10.2/) project. These contracts enable users to interact with the EVM Testnet environment and test a simple ERC20 token implementation.
 
 ## Project Overview
 
-Inferix aims to decentralize verification processes. The Testnet phase focuses on:
+Zenith aims to decentralize verification processes. The Testnet phase focuses on:
 
 - Testing the functionality and robustness of the ERC20 token contract.
 - Preparing for the Mainnet launch by gathering feedback and ensuring security.
@@ -14,6 +13,7 @@ Inferix aims to decentralize verification processes. The Testnet phase focuses o
 
 - **ERC20 Token Contract**: Implements a basic ERC20 token for the Testnet phase.
 - **Test Environment**: Provides a controlled environment to validate contract interactions and performance.
+- **ERC721 NFT Contract**: Implements a basic ERC721 NFT for the Testnet phase.
 
 ## Repository Structure
 
@@ -35,8 +35,8 @@ Inferix aims to decentralize verification processes. The Testnet phase focuses o
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/inferixgpu/token-smartcontract-evm.git
-   cd token-smartcontract-evm
+   git clone https://github.com/Astrq23/SE2025-10.2.git
+   cd SE2025-10.2/token-smartcontract-evm-main
    ```
 
 2. Install dependencies:
@@ -74,12 +74,12 @@ Inferix aims to decentralize verification processes. The Testnet phase focuses o
 2. Deploy the ERC20 token contract using the Ignition module:
 
    ```bash
-   npx hardhat ignition deploy ignition/modules/InferixToken.js --network iotex_testnet
+   npx hardhat ignition deploy ignition/modules/ZenithModule.js --network iotextest
    ```
-
+3. Copy artifacts from `artifacts/contracts/ZenithToken.sol/ZenithToken.json` to `abis` folder for frontend integration. Same for `ZenithNFT.sol`,`TokenStaking.sol`.
 ### Interaction
 
-Use the provided scripts in the `ignition/modules/` directory to interact with the deployed ERC20 token contract, such as transferring tokens or checking balances.
+Use the provided scripts in the `ignition/modules/` directory to interact with the deployed ERC20 token contract, ERC721 NFT contract, such as transferring tokens or checking balances, minting NFTs, and more.
 
 ## Testing
 
@@ -103,9 +103,4 @@ Contributions are welcome! Open an issue or pull request with your ideas or impr
 
 ## Contact
 
-For more information, visit [Inferix](https://inferix.io) or contact us via [contact@inferix.io](mailto:contact@inferix.io).
-
-=======
-# SE2025-10.2
-Tìm hiểu về blockchain, quy trình release một mã tiền điện tử dựa trên EVM. Code backend bằng Solidity tạo contract của 1 đồng tiền, minting NFT và front-end kết nối ví. 
->>>>>>> f6d81ac350d2a167880a44ccff471dbd7f1a411b
+For more information, visit [Zenith](https://astrq23.github.io/SE2025-10.2/)
