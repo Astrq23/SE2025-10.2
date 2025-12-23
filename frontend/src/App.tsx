@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { config, queryClient } from './wagmi';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
-import FeaturesSection from './components/FeaturesSection';
+// Đã xóa import FeaturesSection ở đây vì không cần nữa
 import Footer from './components/Footer'; 
 
 // Import Views
@@ -31,18 +31,13 @@ const App: React.FC = () => {
           {/* Container chính: Chỉ giữ background màu tối chung cho toàn app */}
           <div style={{ minHeight: '100vh', fontFamily: 'sans-serif', backgroundColor: '#0f172a', color: 'white', display: 'flex', flexDirection: 'column' }}>
             
-            {/* Header nằm ở trên cùng (sẽ không bị video đè nữa) */}
+            {/* Header nằm ở trên cùng */}
             <Header />
 
             <main style={{ flexGrow: 1 }}>
               <Routes>
-                {/* Trang chủ: HeroSection (chứa video) + Features */}
-                <Route path="/" element={
-                  <>
-                    <HeroSection /> 
-                    <FeaturesSection />
-                  </>
-                } />
+                {/* Trang chủ: Chỉ cần gọi HeroSection (Features đã nằm trong đó) */}
+                <Route path="/" element={<HeroSection />} />
 
                 {/* Các trang chức năng */}
                 <Route path="/trade" element={<TradeView />} />
@@ -56,7 +51,10 @@ const App: React.FC = () => {
               </Routes>
             </main>
 
-            <Footer />
+            {/* SỬA: Bọc Footer trong div có zIndex cao để nổi lên trên mọi hình nền */}
+            <div style={{ position: 'relative', zIndex: 50 }}>
+              <Footer />
+            </div>
 
             <ToastContainer position="top-right" autoClose={5000} theme="dark" />
           </div>

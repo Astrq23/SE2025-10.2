@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom'; // Thêm useLocation
-
+import { Link, useLocation } from 'react-router-dom';
 import WalletLogin from './WalletLogin';
 import './Header.css';
+
+// --- IMPORT ẢNH (QUAN TRỌNG: Cần đúng tên file và phần mở rộng) ---
+// Giả sử file ảnh nằm ở src/assets/Ricoin.png
+import ricoinLogo from '../assets/Ricoin.png'; 
 
 // List of networks
 const NETWORKS = [
@@ -17,7 +20,6 @@ const NETWORKS = [
 ];
 
 // Navigation links
-// ĐÃ XÓA: isHighlight cứng (Để code tự xử lý)
 const navLinks = [
   { name: 'Trade', href: '/trade' },
   { name: 'MintNFT', href: '/mint' },
@@ -30,21 +32,20 @@ const Header: React.FC = () => {
   const [currentNetwork, setCurrentNetwork] = useState('BNB Chain');
   const [isNetworkOpen, setIsNetworkOpen] = useState(false);
   
-  // Hook lấy đường dẫn hiện tại (Ví dụ: '/mint', '/trade'...)
   const location = useLocation();
 
-  // Refs to handle closing dropdown when clicking outside
+  // Ref only for Network dropdown
   const networkRef = React.useRef<HTMLDivElement>(null);
 
-  // Handle Click (Toggle) for Network button
+  // Handle Click for Network button
   const handleNetworkClick = () => {
     setIsNetworkOpen((prev) => !prev);
-    setIsTradeDropdownOpen(false);
   };
 
   // Logic to close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      // Check click outside Network Dropdown
       if (networkRef.current && !networkRef.current.contains(event.target as Node)) {
         setIsNetworkOpen(false);
       }
@@ -55,13 +56,6 @@ const Header: React.FC = () => {
     };
   }, []);
 
-  // Handle click for disabled links
-  const handleDisabledLinkClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    console.log(`Feature ${e.currentTarget.textContent} is under development.`);
-  };
-
-  // Styles for Network Dropdown
   const networkDropdownStyle: React.CSSProperties = {
     position: 'absolute',
     top: '100%',
@@ -90,45 +84,32 @@ const Header: React.FC = () => {
     <header className="defi-header" style={{ width: '100%', borderBottom: '1px solid #334155' }}>
       <div 
         className="header-inner" 
-        style={{ 
-          width: '100%',          
-          maxWidth: '100%',       
-          margin: '0',
-          padding: '0 30px',      
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          height: '70px',
-          boxSizing: 'border-box'
-        }}
+        style={{ width: '100%', maxWidth: '100%', margin: '0', padding: '0 30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '70px', boxSizing: 'border-box' }}
       >
-        {/* 1. Logo & Name (Left) */}
+        {/* 1. Logo */}
         <Link to="/" style={{ textDecoration: 'none' }}>
           <div className="header-logo-container" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-            <span role="img" aria-label="DeFi Logo" style={{ fontSize: '32px', marginRight: '8px', color: '#facc15' }}>🥞</span>
-            <span style={{ fontSize: '20px', fontWeight: 800, color: 'white' }}>DeFi DEX</span>
+            
+            {/* Logo Hình - Sử dụng biến đã import */}
+            <img 
+              src={ricoinLogo} 
+              alt="Ricoin" 
+              style={{ height: '40px', width: 'auto', marginRight: '10px' }} 
+            />
+
+            {/* Logo Chữ */}
+            <span style={{ fontSize: '20px', fontWeight: 800, color: 'white' }}>
+              RICOIN
+            </span>
+            
           </div>
         </Link>
 
-        {/* 2. Navigation (Center) */}
+        {/* 2. Navigation */}
         <nav className="nav-link-container" style={{ display: 'flex', justifyContent: 'center', gap: '15px' }}>
           {navLinks.map((link) => {
-            // Logic Active: Nếu đường dẫn hiện tại trùng với link.href
             const isActive = location.pathname === link.href;
-            
-            // Logic Disabled: (Hiện tại đang tắt)
-            const isDisabledLink = false;
-
-            // Class Highlight động
             const activeClass = isActive ? 'nav-link-highlight' : '';
-
-            if (isDisabledLink) {
-              return (
-                <a key={link.name} href="#" onClick={handleDisabledLinkClick} className={`nav-link ${activeClass} nav-link-disabled`} style={{ cursor: 'not-allowed', opacity: 0.6 }}>
-                  {link.name}
-                </a>
-              );
-            }
 
             return (
               <Link key={link.name} to={link.href} className={`nav-link ${activeClass}`}>
@@ -138,7 +119,7 @@ const Header: React.FC = () => {
           })}
         </nav>
 
-        {/* 3. Wallet & Network (Right) */}
+        {/* 3. Wallet & Network */}
         <div className="header-wallet-controls" style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div ref={networkRef} style={{ position: 'relative' }}>
             <button
@@ -163,7 +144,13 @@ const Header: React.FC = () => {
             {isNetworkOpen && (
               <div style={networkDropdownStyle}>
                 {NETWORKS.map((net) => (
-                  <div key={net.name} style={networkItemStyle} onClick={() => { setCurrentNetwork(net.name); setIsNetworkOpen(false); }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#334155'; e.currentTarget.style.color = 'white'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#1e293b'; e.currentTarget.style.color = '#b8c0cc'; }}>
+                  <div 
+                    key={net.name} 
+                    style={networkItemStyle} 
+                    onClick={() => { setCurrentNetwork(net.name); setIsNetworkOpen(false); }} 
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#334155'; e.currentTarget.style.color = 'white'; }} 
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#1e293b'; e.currentTarget.style.color = '#b8c0cc'; }}
+                  >
                     <span style={{ color: net.color }}>{net.icon}</span>
                     {net.name}
                   </div>

@@ -6,10 +6,8 @@ import { Link } from 'react-router-dom';
 const Footer: React.FC = () => {
   return (
     <footer style={{
-      // --- ĐÃ CẬP NHẬT MÀU GIỐNG HEADER.CSS ---
       backgroundColor: '#111827', 
-      // ---------------------------------------
-      borderTop: '1px solid #1f2937', // Chỉnh viền trùng tông với header luôn
+      borderTop: '1px solid #1f2937', 
       padding: '60px 20px 30px',
       color: '#cbd5e1', 
       fontFamily: '"Inter", sans-serif',
@@ -44,7 +42,7 @@ const Footer: React.FC = () => {
           </p>
         </div>
 
-        {/* COL 2: QUICK LINKS */}
+        {/* COL 2: QUICK LINKS (ĐÃ ĐỒNG BỘ VỚI HEADER) */}
         <div>
           <h3 style={{ color: 'white', fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '20px' }}>
             Discover
@@ -57,10 +55,13 @@ const Footer: React.FC = () => {
               <Link to="/mint" style={linkStyle}>Mint NFT</Link>
             </li>
             <li>
-              <Link to="/earn" style={linkStyle}>Earn</Link>
+              <Link to="/tokens" style={linkStyle}>Tokens</Link>
             </li>
             <li>
-              <Link to="/tokens" style={linkStyle}>Token Management</Link>
+              <Link to="/swap" style={linkStyle}>Swap</Link>
+            </li>
+            <li>
+              <Link to="/nft-marketplace" style={linkStyle}>Marketplace</Link>
             </li>
           </ul>
         </div>
@@ -103,7 +104,12 @@ const Footer: React.FC = () => {
             </a>
 
             {/* Github */}
-            <a href="#" style={socialIconWrapper}>
+            <a 
+              href="https://github.com/Astrq23/SE2025-10.2/tree/main" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              style={socialIconWrapper}
+            >
               <img 
                 src="https://img.icons8.com/ios-filled/50/ffffff/github.png" 
                 alt="GitHub" 
@@ -116,7 +122,7 @@ const Footer: React.FC = () => {
 
       {/* COPYRIGHT */}
       <div style={{
-        borderTop: '1px solid #1f2937', // Viền cũng chỉnh theo Header css
+        borderTop: '1px solid #1f2937', 
         paddingTop: '20px',
         textAlign: 'center',
         fontSize: '0.85rem',
@@ -139,7 +145,7 @@ const linkStyle: React.CSSProperties = {
 const socialIconWrapper: React.CSSProperties = {
   width: '40px',
   height: '40px',
-  backgroundColor: '#1f2937', // Chỉnh nền icon sáng hơn nền footer 1 chút
+  backgroundColor: '#1f2937', 
   borderRadius: '50%',
   display: 'flex',
   alignItems: 'center',

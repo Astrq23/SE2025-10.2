@@ -8,201 +8,131 @@ interface Feature {
 
 const FeaturesSection: React.FC = () => {
   const features: Feature[] = [
-    {
-      icon: '⚡',
-      title: 'Fast Transactions',
-      description: 'Execute trades at high speed across leading blockchain networks.',
-    },
-    {
-      icon: '💰',
-      title: 'Low Fees',
-      description: 'Enjoy the most competitive trading fees in the industry.',
-    },
-    {
-      icon: '🔒',
-      title: 'High Security',
-      description: 'Your wallet is always protected with industry-leading security standards.',
-    },
-    {
-      icon: '🌐',
-      title: 'Multi-Chain',
-      description: 'Support for trading on Ethereum, BNB Chain, Solana, Arbitrum, and more.',
-    },
-    {
-      icon: '📊',
-      title: 'Professional Tools',
-      description: 'Access advanced charts, real-time order books, and in-depth analytics.',
-    },
-    {
-      icon: '🚀',
-      title: 'Yield Farming',
-      description: 'Earn rewards by providing liquidity and staking tokens.',
-    },
+    { icon: '⚡', title: 'Fast Transactions', description: 'Execute trades at high speed across leading blockchain networks.' },
+    { icon: '💰', title: 'Low Fees', description: 'Enjoy the most competitive trading fees in the industry.' },
+    { icon: '🔒', title: 'High Security', description: 'Your wallet is always protected with industry-leading security standards.' },
+    { icon: '🌐', title: 'Multi-Chain', description: 'Support for trading on Ethereum, BNB Chain, Solana, Arbitrum, and more.' },
+    { icon: '📊', title: 'Professional Tools', description: 'Access advanced charts, real-time order books, and in-depth analytics.' },
+    { icon: '🚀', title: 'Yield Farming', description: 'Earn rewards by providing liquidity and staking tokens.' },
   ];
 
   return (
-    <section style={{ 
-      backgroundColor: '#0f172a',
-      padding: '80px 0',
-      borderTop: '1px solid #334155'
+    // CONTAINER BAO NGOÀI (Chịu trách nhiệm căn lề 6%)
+    <div style={{ 
+      padding: '0 6%',       // Yêu cầu 1: Cách lề trái phải 6%
+      marginTop: '40px',
+      marginBottom: '100px', // Yêu cầu 2: Tách xa footer ra (cách đáy 100px)
+      position: 'relative',
+      zIndex: 10
     }}>
-      <div style={{
-        maxWidth: '100%',
-        margin: '0 auto',
-        padding: '0 24px',
+      
+      {/* KHỐI CHÍNH (Feature Block) - Được bo góc và có nền mờ */}
+      <section style={{ 
+        backgroundColor: 'rgba(15, 23, 42, 0.6)', // Nền tối trong suốt (Slate-900 60%)
+        backdropFilter: 'blur(12px)',             // Hiệu ứng kính mờ
+        borderRadius: '32px',                     // Yêu cầu 3: Bo góc cả khối lớn
+        border: '1px solid rgba(255, 255, 255, 0.05)', // Viền mỏng bao quanh khối
+        padding: '60px 40px',                     // Padding bên trong khối
+        maxWidth: '1400px',                       // Giới hạn chiều rộng tối đa cho đẹp
+        margin: '0 auto',                         // Căn giữa khối
+        boxShadow: '0 20px 50px rgba(0, 0, 0, 0.3)' // Đổ bóng nhẹ cho nổi khối
       }}>
-        {/* Tiêu đề */}
-        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+        
+        {/* Header của Section */}
+        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
           <h2 style={{
             color: '#facc15',
             fontSize: '2.5rem',
             marginBottom: '16px',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            textShadow: '0 0 30px rgba(250, 204, 21, 0.2)'
           }}>
             Why Choose DeFi DEX?
           </h2>
           <p style={{
-            color: '#b8c0cc',
-            fontSize: '1.1rem',
-            maxWidth: '600px',
-            margin: '0 auto'
+            color: '#94a3b8',
+            fontSize: '1.05rem',
+            maxWidth: '650px',
+            margin: '0 auto',
+            lineHeight: '1.6'
           }}>
-            A comprehensive DeFi trading platform with high performance, excellent security, and outstanding user experience.
+            Experience the next level of decentralized trading with our powerful features, 
+            designed for both beginners and pro traders.
           </p>
         </div>
 
-        {/* Lưới các tính năng */}
+        {/* Grid các tính năng */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(3, minmax(300px, 1fr))',
-          gap: '30px',
-          marginBottom: '60px'
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: '24px',
         }}>
           {features.map((feature, index) => (
             <div 
               key={index}
               style={{
-                backgroundColor: '#1e293b',
-                borderRadius: '16px',
-                border: '1px solid #334155',
-                padding: '30px',
+                backgroundColor: 'rgba(255, 255, 255, 0.03)', // Nền từng thẻ con nhạt hơn nữa
+                borderRadius: '20px',
+                padding: '24px',
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '16px',
                 transition: 'all 0.3s ease',
-                cursor: 'pointer',
+                border: '1px solid transparent' // Chuẩn bị sẵn border để hover
               }}
               onMouseEnter={(e) => {
                 const el = e.currentTarget as HTMLDivElement;
-                el.style.backgroundColor = '#2d3b52';
-                el.style.borderColor = '#4ade80';
+                el.style.backgroundColor = 'rgba(255, 255, 255, 0.08)'; // Sáng hơn khi hover
                 el.style.transform = 'translateY(-4px)';
-                el.style.boxShadow = '0 8px 20px rgba(74, 222, 128, 0.1)';
+                el.style.border = '1px solid rgba(250, 204, 21, 0.3)';
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget as HTMLDivElement;
-                el.style.backgroundColor = '#1e293b';
-                el.style.borderColor = '#334155';
+                el.style.backgroundColor = 'rgba(255, 255, 255, 0.03)';
                 el.style.transform = 'translateY(0)';
-                el.style.boxShadow = 'none';
+                el.style.border = '1px solid transparent';
               }}
             >
               {/* Icon */}
               <div style={{
-                fontSize: '2.5rem',
-                marginBottom: '16px',
+                flexShrink: 0,
+                width: '56px',
+                height: '56px',
+                borderRadius: '14px',
+                background: 'linear-gradient(135deg, rgba(250,204,21,0.1), rgba(250,204,21,0.05))',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.75rem',
+                border: '1px solid rgba(250, 204, 21, 0.15)'
               }}>
                 {feature.icon}
               </div>
               
-              {/* Tiêu đề */}
-              <h3 style={{
-                color: '#ffffff',
-                fontSize: '1.3rem',
-                marginBottom: '12px',
-                fontWeight: 'bold'
-              }}>
-                {feature.title}
-              </h3>
-              
-              {/* Mô tả */}
-              <p style={{
-                color: '#b8c0cc',
-                fontSize: '0.95rem',
-                lineHeight: '1.6'
-              }}>
-                {feature.description}
-              </p>
+              {/* Nội dung */}
+              <div>
+                <h3 style={{
+                  color: 'white',
+                  fontSize: '1.15rem',
+                  fontWeight: '700',
+                  marginBottom: '8px'
+                }}>
+                  {feature.title}
+                </h3>
+                <p style={{
+                  color: '#94a3b8',
+                  fontSize: '0.95rem',
+                  lineHeight: '1.5',
+                  margin: 0
+                }}>
+                  {feature.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>
-
-        {/* Phần thống kê
-        <div style={{
-          backgroundColor: '#1e293b',
-          borderRadius: '16px',
-          border: '1px solid #334155',
-          padding: '40px',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '30px',
-          textAlign: 'center'
-        }}>
-          {/* <div>
-            <div style={{
-              color: '#4ade80',
-              fontSize: '2.5rem',
-              fontWeight: 'bold',
-              marginBottom: '8px'
-            }}>
-              $500M+
-            </div>
-            <div style={{ color: '#b8c0cc' }}>
-              Total Liquidity
-            </div>
-          </div> */}
-
-          {/* <div>
-            <div style={{
-              color: '#06b6d4',
-              fontSize: '2.5rem',
-              fontWeight: 'bold',
-              marginBottom: '8px'
-            }}>
-              12+
-            </div>
-            <div style={{ color: '#b8c0cc' }}>
-              Supported Chains
-            </div>
-          </div> */}
-
-          {/* <div>
-            <div style={{
-              color: '#facc15',
-              fontSize: '2.5rem',
-              fontWeight: 'bold',
-              marginBottom: '8px'
-            }}>
-              1M+
-            </div>
-            <div style={{ color: '#b8c0cc' }}>
-              Active Users
-            </div>
-          </div> */}
-
-          {/* <div>
-            <div style={{
-              color: '#f87171',
-              fontSize: '2.5rem',
-              fontWeight: 'bold',
-              marginBottom: '8px'
-            }}>
-              0.1%
-            </div>
-            <div style={{ color: '#b8c0cc' }}>
-              Low Trading Fees
-            </div>
-          </div> */}
-        {/* </div>  */}
-      </div>
-    </section>
+      </section>
+    </div>
   );
 };
 

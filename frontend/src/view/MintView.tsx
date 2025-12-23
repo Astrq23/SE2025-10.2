@@ -1,17 +1,14 @@
 import React from 'react';
 import MintingBox from '../components/MintingBox';
-import AppPagination from '../components/AppPagination';
 import nftBg from '../assets/nft.jpg';
-
-
 
 const MintView: React.FC = () => {
     return (
         // CONTAINER CHÍNH
-        <div style={{ position: 'relative', minHeight: '100vh', color: 'white' }}>
+        <div style={{ position: 'relative', width: '100%', color: 'white' }}>
             
             {/* 1. BACKGROUND IMAGE (CỐ ĐỊNH) */}
-            {/* Dùng thẻ img với position fixed để làm hình nền không bị trôi */}
+            {/* Sửa zIndex thành 0 để nằm đè lên background của App nhưng dưới nội dung */}
             <img
                 src={nftBg}
                 alt="NFT Background"
@@ -22,12 +19,12 @@ const MintView: React.FC = () => {
                     width: '100%',
                     height: '100%',
                     objectFit: 'cover',
-                    zIndex: 1, // Đẩy xuống dưới cùng
+                    zIndex: 0, 
                 }}
             />
 
             {/* 2. LỚP PHỦ TỐI (OVERLAY) */}
-            {/* Giúp làm tối hình nền để nội dung phía trên dễ đọc hơn */}
+            {/* Sửa zIndex thành 1 để đè lên ảnh */}
             <div
                 style={{
                     position: 'fixed',
@@ -35,18 +32,20 @@ const MintView: React.FC = () => {
                     left: 0,
                     width: '100%',
                     height: '100%',
-                    backgroundColor: 'rgba(15, 23, 42, 0.85)', // Màu Slate-900 độ mờ 85%
-                    zIndex: 2,
+                    backgroundColor: 'rgba(15, 23, 42, 0.85)', 
+                    zIndex: 1, 
                 }}
             ></div>
 
-            {/* 3. NỘI DUNG CHÍNH (NỔI LÊN TRÊN) */}
+            {/* 3. NỘI DUNG CHÍNH */}
+            {/* Sửa zIndex thành 10 để nổi lên trên cùng */}
             <div style={{ position: 'relative', zIndex: 10, width: '100%', boxSizing: 'border-box' }}>
                 <div
                     style={{
                         maxWidth: '1200px',
                         margin: '0 auto',
                         padding: '60px 20px 80px',
+                        minHeight: '80vh'
                     }}
                 >
                     {/* Title Section */}
@@ -62,18 +61,14 @@ const MintView: React.FC = () => {
 
                     {/* Minting Box Area */}
                     <div className="flex justify-center mb-12 relative">
-                        {/* Hiệu ứng Glow nhẹ phía sau box */}
+                        {/* Hiệu ứng Glow */}
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg h-64 bg-purple-600/30 rounded-full blur-[80px] pointer-events-none"></div>
                         
                         <div className="relative z-10 w-full max-w-xl">
                             <MintingBox />
                         </div>
                     </div>
-
-                    {/* Pagination */}
-                    <div className="flex justify-center mt-12">
-                        <AppPagination />
-                    </div>
+                    
                 </div>
             </div>
         </div>
