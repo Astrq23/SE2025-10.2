@@ -10,10 +10,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { config, queryClient } from './wagmi';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
-// Đã xóa import FeaturesSection ở đây vì không cần nữa
 import Footer from './components/Footer'; 
 
-// Import Views
+// Import Views & Components
 import TradeView from './view/TradeChartView'; 
 import MintView from './view/MintView';
 import EarnView from './view/EarnView';
@@ -22,6 +21,10 @@ import TokenManagementView from './view/TokenManagementView';
 import StakingView from './view/StakingView';
 import SwapView from './view/SwapView';
 import NFTMarketplaceView from './view/NFTMarketplaceView';
+
+// --- THÊM IMPORT TRANG NEWS TẠI ĐÂY ---
+// (Đảm bảo file News.tsx nằm trong thư mục components hoặc view tùy bạn lưu)
+import News from './components/News'; 
 
 const App: React.FC = () => {
   return (
@@ -36,7 +39,7 @@ const App: React.FC = () => {
 
             <main style={{ flexGrow: 1 }}>
               <Routes>
-                {/* Trang chủ: Chỉ cần gọi HeroSection (Features đã nằm trong đó) */}
+                {/* Trang chủ: Chỉ cần gọi HeroSection */}
                 <Route path="/" element={<HeroSection />} />
 
                 {/* Các trang chức năng */}
@@ -48,10 +51,13 @@ const App: React.FC = () => {
                 <Route path="/earn" element={<EarnView />} />
                 <Route path="/buy-crypto" element={<BuyCryptoView />} />
                 <Route path="/tokens" element={<TokenManagementView />} />
+                
+                {/* --- THÊM ROUTE CHO NEWS --- */}
+                <Route path="/news" element={<News />} />
               </Routes>
             </main>
 
-            {/* SỬA: Bọc Footer trong div có zIndex cao để nổi lên trên mọi hình nền */}
+            {/* Footer */}
             <div style={{ position: 'relative', zIndex: 50 }}>
               <Footer />
             </div>
