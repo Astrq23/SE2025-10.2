@@ -1,5 +1,3 @@
-// src/components/MintingBox.tsx
-
 import React, { useState } from 'react';
 import { useWriteContract, useAccount } from 'wagmi';
 import { toast } from 'react-toastify'; 
