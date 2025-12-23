@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useWriteContract, useReadContract } from 'wagmi';
+import { useWriteContract, usePublicClient } from 'wagmi'; // Thêm usePublicClient
 import { parseUnits } from 'viem';
 import { ERC20_ABI } from '../utils/erc20Abi';
 import TokenStakingArtifact from '../abis/TokenStaking.json';
@@ -13,37 +13,37 @@ export const useStaking = () => {
   const contractAddress = CONTRACT_ADDRESSES.localhost.STAKING as `0x${string}`;
   const tokenAddress = CONTRACT_ADDRESSES.localhost.ZNT as `0x${string}`;
 
+  // Hook để tương tác blockchain
   const { writeContractAsync } = useWriteContract();
+  // Hook để lấy client nhằm chờ transaction receipt
+  const publicClient = usePublicClient();
 
-  // Helper: simple poll for tx receipt via provider (used to wait for approve confirmation)
-  const waitForReceipt = async (hash: `0x${string}`, timeoutMs = 120000) => {
-    if (!(window as any).ethereum) return;
-    const start = Date.now();
-    while (Date.now() - start < timeoutMs) {
-      try {
-        const receipt = await (window as any).ethereum.request({
-          method: 'eth_getTransactionReceipt',
-          params: [hash]
-        });
-        if (receipt) return receipt;
-      } catch (e) {
-        // ignore and retry
-      }
-      // wait 1s
-      // eslint-disable-next-line no-await-in-loop
-      await new Promise((r) => setTimeout(r, 1000));
+  const extractRpcErrorMessage = (err: any) => {
+    try {
+      if (!err) return 'Unknown error';
+      if (typeof err === 'string') return err;
+      return (
+        err?.reason ||
+        err?.message ||
+        err?.data?.message ||
+        err?.shortMessage || // Viem thường trả về shortMessage dễ đọc hơn
+        'Unknown error'
+      );
+    } catch (e) {
+      return 'Unknown error';
     }
-    throw new Error('Timeout waiting for transaction receipt');
   };
 
   const stake = useCallback(async (amount: string) => {
     setIsLoading(true);
     setError(null);
     try {
-      // Convert to wei (bigint) safely
+      if (!publicClient) throw new Error("Public Client not found");
+      
       const amountWei = parseUnits(amount, 18);
 
-      // Ensure staking contract is approved to transfer user's tokens
+      // --- BƯỚC 1: APPROVE ---
+      // Lưu ý: Tốt nhất nên check allowance trước, nhưng để đơn giản ta cứ approve
       try {
         const approveHash = await writeContractAsync({
           address: tokenAddress,
@@ -52,94 +52,115 @@ export const useStaking = () => {
           args: [contractAddress, amountWei]
         });
 
-        // Wait for approve to be mined to avoid race condition
-        try {
-          await waitForReceipt(approveHash as `0x${string}`);
-        } catch (waitErr) {
-          // proceed anyway; stake may still fail if approve not mined
-          console.warn('approve receipt wait failed', waitErr);
-        }
+        // Chờ transaction Approve được confirm trên blockchain
+        // Đây là bước quan trọng thay thế cho waitForReceipt thủ công
+        await publicClient.waitForTransactionReceipt({ 
+            hash: approveHash 
+        });
+
       } catch (approveErr) {
-        // If approve fails, surface the error
-        setIsLoading(false);
-        setError((approveErr as any)?.message || 'Approve failed');
-        throw approveErr;
+        console.error("Approve Error:", approveErr);
+        throw new Error("Phê duyệt Token thất bại (Approve Failed)");
       }
 
-      const tx = await writeContractAsync({
+      // --- BƯỚC 2: STAKE ---
+      const txHash = await writeContractAsync({
         address: contractAddress,
         abi: contractAbi,
         functionName: 'stake',
         args: [amountWei]
       });
+      
+      // (Tuỳ chọn) Chờ stake confirm xong mới tắt loading
+      await publicClient.waitForTransactionReceipt({ 
+          hash: txHash 
+      });
+
       setIsLoading(false);
-      return tx;
+      return txHash;
+
     } catch (err: any) {
-      const errorMsg = err?.message || 'Stake failed';
+      console.error('Stake Error full:', err);
+      const errorMsg = extractRpcErrorMessage(err) || 'Stake failed';
       setError(errorMsg);
       setIsLoading(false);
       throw err;
     }
-  }, [contractAddress, contractAbi, writeContractAsync]);
+  }, [contractAddress, contractAbi, writeContractAsync, publicClient, tokenAddress]); // Thêm dependencies
 
   const unstake = useCallback(async (amount: string) => {
     setIsLoading(true);
     setError(null);
     try {
+      if (!publicClient) throw new Error("Client unavailable");
       const amountWei = parseUnits(amount, 18);
-      const tx = await writeContractAsync({
+      
+      const txHash = await writeContractAsync({
         address: contractAddress,
         abi: contractAbi,
         functionName: 'unstake',
         args: [amountWei]
       });
+
+      await publicClient.waitForTransactionReceipt({ hash: txHash });
+      
       setIsLoading(false);
-      return tx;
+      return txHash;
     } catch (err: any) {
-      const errorMsg = err?.message || 'Unstake failed';
+      const errorMsg = extractRpcErrorMessage(err) || 'Unstake failed';
       setError(errorMsg);
       setIsLoading(false);
       throw err;
     }
-  }, [contractAddress, contractAbi, writeContractAsync]);
+  }, [contractAddress, contractAbi, writeContractAsync, publicClient]);
 
   const unstakeAll = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const tx = await writeContractAsync({
+      if (!publicClient) throw new Error("Client unavailable");
+
+      const txHash = await writeContractAsync({
         address: contractAddress,
         abi: contractAbi,
         functionName: 'unstakeAll'
       });
+
+      await publicClient.waitForTransactionReceipt({ hash: txHash });
+
       setIsLoading(false);
-      return tx;
+      return txHash;
     } catch (err: any) {
-      const errorMsg = err?.message || 'Unstake all failed';
+      const errorMsg = extractRpcErrorMessage(err) || 'Unstake all failed';
       setError(errorMsg);
       setIsLoading(false);
       throw err;
     }
-  }, [contractAddress, contractAbi, writeContractAsync]);
+  }, [contractAddress, contractAbi, writeContractAsync, publicClient]);
 
   const claimRewards = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const tx = await writeContractAsync({
+      if (!publicClient) throw new Error("Client unavailable");
+
+      const txHash = await writeContractAsync({
         address: contractAddress,
         abi: contractAbi,
         functionName: 'claimRewards'
       });
+
+      await publicClient.waitForTransactionReceipt({ hash: txHash });
+
       setIsLoading(false);
-      return tx;
+      return txHash;
     } catch (err: any) {
-      const errorMsg = err?.message || 'Claim rewards failed';
+      const errorMsg = extractRpcErrorMessage(err) || 'Claim rewards failed';
       setError(errorMsg);
       setIsLoading(false);
       throw err;
     }
-  }, [contractAddress, contractAbi, writeContractAsync]);
+  }, [contractAddress, contractAbi, writeContractAsync, publicClient]);
 
   return {
     stake,
