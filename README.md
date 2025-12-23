@@ -2,7 +2,7 @@
 **Project Name:** Zenith Portal (Ricoin Platform)
 **Student Name:** Nguyễn Thừa Tuân, Nguyễn Hoàng Việt, Ngô Khánh Trượng, Trương Đan vi
 **Class:** SE2025-10.2
-
+**[DEMO](https://drive.google.com/file/d/11cFDEF3VRAPQ8SMUdyWXtU5hG6U5wW0S/view?usp=sharing)**
 ---
 
 ## 1. Project Overview (Tổng quan dự án)
@@ -90,6 +90,7 @@ Hệ thống Smart Contract viết bằng **Solidity 0.8.20**, bao gồm 5 contr
 Dự án **Zenith Portal** đã hoàn thành xuất sắc mục tiêu đề ra:
 1.  **Frontend:** Một giao diện DEX hoàn chỉnh, đẹp mắt, xử lý tốt các tác vụ Web3 phức tạp và tối ưu trải nghiệm người dùng.
 2.  **Backend:** Một hệ thống Smart Contract an toàn, chuẩn mực, đáp ứng đầy đủ nghiệp vụ tài chính (Swap, Stake, NFT).
+
 
 
 
