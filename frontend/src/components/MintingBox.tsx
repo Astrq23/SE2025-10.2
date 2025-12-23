@@ -171,7 +171,7 @@ const MintingBox: React.FC = () => {
                 disabled={!isConnected || isProcessing} 
                 style={{
                     width: '100%',
-                    padding: '1.1rem', // Tăng độ dày nút
+                    padding: '1.1rem', 
                     borderRadius: '0.75rem', 
                     fontSize: '1.1rem', 
                     fontWeight: 'bold',
@@ -179,7 +179,7 @@ const MintingBox: React.FC = () => {
                     backgroundColor: (!isConnected || isProcessing) ? '#4b5563' : '#3b82f6',
                     color: colorWhite,
                     cursor: isProcessing ? 'wait' : 'pointer',
-                    marginTop: '0.5rem', // Khoảng cách thêm vào
+                    marginTop: '0.5rem', 
                     boxShadow: isConnected && !isProcessing ? '0 4px 14px 0 rgba(59, 130, 246, 0.39)' : 'none'
                 }}
             >

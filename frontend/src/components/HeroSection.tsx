@@ -3,7 +3,6 @@
 import React from 'react';
 import ConvertBox from './ConvertBox'; 
 import AppPagination from './AppPagination';
-import FeaturesSection from './FeaturesSection'; // Import FeaturesSection vào đây
 
 // Network list with actual Logo Links
 const SUPPORTED_NETWORKS: { symbol: string; logo: string }[] = [
@@ -58,15 +57,14 @@ const HeroSection: React.FC = () => {
       {/* Phải bọc trong div relative với z-index > 0 để nổi lên trên video */}
       <div style={{ position: 'relative', zIndex: 10 }}>
           
-          {/* PHẦN HERO: Top Choices & ConvertBox */}
           <section style={{ padding: '40px 0 80px', width: '100%' }}>
             <div
               className="hero-section-layout"
               style={{
-                width: '100%',          
+                width: '100%',           
                 maxWidth: '100%',       
                 margin: '0',
-                padding: '0 6%',        // Spacious padding (6%)
+                padding: '0 6%',         // Spacious padding (6%)
                 boxSizing: 'border-box',
                 display: 'grid',
                 // Responsive Grid: 2 columns on large screens, 1 on small
@@ -198,11 +196,6 @@ const HeroSection: React.FC = () => {
           >
             <AppPagination />
           </div>
-
-          {/* === PHẦN FEATURES SECTION (ĐƯỢC THÊM VÀO ĐÂY) === */}
-          {/* Nằm bên trong thẻ div có z-index: 10 nên sẽ đè lên video nền */}
-          <FeaturesSection />
-
       </div>
     </div>
   );

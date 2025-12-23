@@ -177,12 +177,10 @@ const ConvertBox: React.FC = () => {
         </div>
       </div>
 
-      {/* Rate Info */}
       <div style={{ textAlign: 'center', marginTop: '10px', fontSize: '0.9rem', color: '#94a3b8', minHeight: '20px' }}>
           {priceA && priceB ? `1 ${tokenA.id} ≈ ${(priceA/priceB).toFixed(6)} ${tokenB.id}` : 'Fetching rates...'}
       </div>
 
-      {/* Convert Button */}
       <button
         onClick={handleConvert}
         disabled={isConverting}

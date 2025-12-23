@@ -12,12 +12,12 @@
 }
 
 .header-inner {
-    /* --- SỬA Ở ĐÂY --- */
+
     width: 100%;         /* Chiếm hết chiều rộng cha */
-    max-width: 100%;     /* Bỏ giới hạn 1280px */
-    /* ----------------- */
+    max-width: 100%;    
+
     
-    margin: 0;           /* Bỏ auto margin */
+    margin: 0;           
     padding-left: 2rem;  /* Tăng padding để thoáng mắt hơn */
     padding-right: 2rem;
     display: flex;

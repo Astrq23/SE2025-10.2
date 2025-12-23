@@ -35,8 +35,7 @@ const NFTMarketplace: React.FC = () => {
 
   useEffect(() => {
     if (activeListings && Array.isArray(activeListings)) {
-      // Fetch chi tiết từng listing
-      // Đây là ví dụ, thực tế cần call getListing cho từng ID
+
       setListings([]);
     }
   }, [activeListings]);

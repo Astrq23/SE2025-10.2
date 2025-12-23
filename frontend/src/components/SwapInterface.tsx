@@ -31,7 +31,7 @@ const SwapInterface: React.FC = () => {
     { name: 'USDT', address: '0x...' }
   ];
 
-  // Giả lập tính toán output (Trong thực tế sẽ call contract read)
+
   useEffect(() => {
     if (swapData.amountIn && parseFloat(swapData.amountIn) > 0) {
       const mockRate = 1.5; // Giả sử 1 ZENITH = 1.5 USDC
