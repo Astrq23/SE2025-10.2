@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 # REPORT: DECENTRALIZED EXCHANGE (DEX) DEVELOPMENT
 **Project Name:** Zenith Portal (Ricoin Platform)
-**Student Name:** Nguyễn Thừa Tuân
+**Student Name:** Nguyễn Thừa Tuân, Nguyễn Hoàng Việt, Ngô Khánh Trượng, Trương Đan vi
 **Class:** SE2025-10.2
 
 ---
@@ -22,13 +21,13 @@ Dự án không chỉ dừng lại ở việc viết Smart Contract, mà còn t�
 
 ### 2.2. Objectives (Các đầu việc cụ thể)
 
-#### A. Frontend Development (Trọng số 50%)
+#### A. Frontend Development
 * **Kiến trúc SPA:** Xây dựng ứng dụng Single Page Application với **React (Vite)** và **React Router v6** để chuyển trang tức thì không độ trễ.
 * **Component System:** Thiết kế bộ thư viện Component tái sử dụng (`MintingBox`, `TokenSelector`, `Header/Footer`) để đảm bảo tính nhất quán.
 * **Visual Engineering:** Xử lý các kỹ thuật giao diện phức tạp như **Video Background**, **Z-index Layering** (xử lý xung đột giữa các lớp phủ và nội dung nền), và **Responsive Design**.
 * **Web3 Integration:** Tích hợp **Wagmi/Viem** để xử lý kết nối ví đa chuỗi, hiển thị số dư real-time và phản hồi trạng thái giao dịch (Toast Notification).
 
-#### B. Backend/Smart Contract (Trọng số 50%)
+#### B. Backend/Smart Contract
 * **AMM DEX:** Triển khai cơ chế tạo lập thị trường tự động ($x*y=k$) cho phép Swap token liên tục.
 * **Staking Logic:** Xây dựng cơ chế gửi tiết kiệm (Stake) nhận lãi suất APY 12%.
 * **NFT Standard:** Triển khai NFT Marketplace với đầy đủ tính năng Listing, Buying, và thu phí sàn tự động.
@@ -91,6 +90,7 @@ Hệ thống Smart Contract viết bằng **Solidity 0.8.20**, bao gồm 5 contr
 Dự án **Zenith Portal** đã hoàn thành xuất sắc mục tiêu đề ra:
 1.  **Frontend:** Một giao diện DEX hoàn chỉnh, đẹp mắt, xử lý tốt các tác vụ Web3 phức tạp và tối ưu trải nghiệm người dùng.
 2.  **Backend:** Một hệ thống Smart Contract an toàn, chuẩn mực, đáp ứng đầy đủ nghiệp vụ tài chính (Swap, Stake, NFT).
+
 
 =======
 # REPORT: DECENTRALIZED EXCHANGE (DEX) DEVELOPMENT
