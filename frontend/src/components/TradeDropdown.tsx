@@ -54,7 +54,6 @@ const TradeDropdown: React.FC = () => {
   return (
     <div 
         style={dropdownStyle} 
-        // Không cần onMouseLeave/onMouseEnter ở đây nữa
     >
       
       {/* 1. Mục Swap */}

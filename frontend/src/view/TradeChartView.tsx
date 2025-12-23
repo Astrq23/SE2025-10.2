@@ -41,7 +41,7 @@ const TradeView: React.FC = () => {
           width: '100%',
           height: '100%',
           backgroundColor: 'rgba(15, 23, 42, 0.75)', // Màu tối Slate-900 độ mờ 75%
-          zIndex: -1, // Đẩy xuống cùng với video
+          zIndex: -1, 
         }}
       ></div>
 

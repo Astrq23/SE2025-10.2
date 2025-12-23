@@ -47,7 +47,7 @@ const WalletLogin: React.FC = () => {
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
-        boxShadow: '0 4px 14px 0 rgba(124, 58, 237, 0.3)', // Bóng màu tím
+        boxShadow: '0 4px 14px 0 rgba(124, 58, 237, 0.3)', 
         transition: 'transform 0.2s ease',
         fontSize: '15px'
       }}
