@@ -6,7 +6,7 @@
 ---
 
 ## 1. Project Overview (Tổng quan dự án)
-**Zenith Portal** là một nền tảng tài chính phi tập trung (DeFi) toàn diện, kết hợp sức mạnh của công nghệ Blockchain (EVM) với trải nghiệm người dùng hiện đại.
+**[Zenith Portal](https://astrq23.github.io/SE2025-10.2/)** là một nền tảng tài chính phi tập trung (DeFi) toàn diện, kết hợp sức mạnh của công nghệ Blockchain (EVM) với trải nghiệm người dùng hiện đại.
 
 Dự án không chỉ dừng lại ở việc viết Smart Contract, mà còn tập trung giải quyết bài toán khó nhất của Web3 hiện nay: **Rào cản giao diện**. Hệ thống cung cấp một Frontend trực quan, mượt mà, giúp người dùng dễ dàng tiếp cận các tính năng phức tạp như Swap, Staking và NFT Marketplace.
 
@@ -90,6 +90,7 @@ Hệ thống Smart Contract viết bằng **Solidity 0.8.20**, bao gồm 5 contr
 Dự án **Zenith Portal** đã hoàn thành xuất sắc mục tiêu đề ra:
 1.  **Frontend:** Một giao diện DEX hoàn chỉnh, đẹp mắt, xử lý tốt các tác vụ Web3 phức tạp và tối ưu trải nghiệm người dùng.
 2.  **Backend:** Một hệ thống Smart Contract an toàn, chuẩn mực, đáp ứng đầy đủ nghiệp vụ tài chính (Swap, Stake, NFT).
+
 
 
 
