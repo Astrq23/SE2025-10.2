@@ -262,7 +262,7 @@ const StakingDashboard: React.FC = () => {
                         fontWeight: 'bold', fontSize: '0.9rem', cursor: 'pointer', transition: 'all 0.2s'
                     }}
                     >
-                    Deposit
+                    Stake
                     </button>
                     <button 
                     onClick={() => setActiveTab('unstake')}
@@ -273,7 +273,7 @@ const StakingDashboard: React.FC = () => {
                         fontWeight: 'bold', fontSize: '0.9rem', cursor: 'pointer', transition: 'all 0.2s'
                     }}
                     >
-                    Withdraw
+                    Unstake
                     </button>
                 </div>
 

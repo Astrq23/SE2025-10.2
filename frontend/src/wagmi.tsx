@@ -1,6 +1,5 @@
 // frontend/src/wagmi.tsx
 import { createConfig, http } from 'wagmi';
-// QUAN TRỌNG: Phải import localhost và iotexTestnet thay vì mainnet
 import { localhost, iotexTestnet } from 'wagmi/chains'; 
 import { injected } from 'wagmi/connectors';
 import { QueryClient } from '@tanstack/react-query'; 
