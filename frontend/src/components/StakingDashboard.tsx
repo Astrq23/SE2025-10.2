@@ -30,12 +30,35 @@ const StakingDashboard: React.FC = () => {
   });
 
   useEffect(() => {
-    if (userStakingData && Array.isArray(userStakingData)) {
-      setStakingInfo({
-        stakedAmount: formatEther(userStakingData[0]), 
-        availableRewards: formatEther(userStakingData[1]),
-        totalRewardsEarned: formatEther(userStakingData[2])
-      });
+    if (!userStakingData) return;
+
+    try {
+      // Some providers return an array-like tuple, others return an object with numeric keys or named keys.
+      if (Array.isArray(userStakingData)) {
+        setStakingInfo({
+          stakedAmount: formatEther(userStakingData[0]),
+          availableRewards: formatEther(userStakingData[1]),
+          totalRewardsEarned: formatEther(userStakingData[2])
+        });
+        return;
+      }
+
+      // If it's an object with numeric keys ("0","1","2")
+      if (typeof userStakingData === 'object' && userStakingData !== null) {
+        const a = (userStakingData as any)[0] ?? (userStakingData as any)['0'] ?? (userStakingData as any).stakedAmount;
+        const b = (userStakingData as any)[1] ?? (userStakingData as any)['1'] ?? (userStakingData as any).availableRewards;
+        const c = (userStakingData as any)[2] ?? (userStakingData as any)['2'] ?? (userStakingData as any).totalRewardsEarned;
+
+        setStakingInfo({
+          stakedAmount: a ? formatEther(a) : '0',
+          availableRewards: b ? formatEther(b) : '0',
+          totalRewardsEarned: c ? formatEther(c) : '0'
+        });
+      }
+    } catch (e) {
+      // Guard against unexpected shapes/types
+      // eslint-disable-next-line no-console
+      console.warn('Failed to parse staking data', e, userStakingData);
     }
   }, [userStakingData]);
 
@@ -54,8 +77,11 @@ const StakingDashboard: React.FC = () => {
       setAmount('');
       refetchStakingInfo();
     } catch (error: any) {
-      console.error(error);
-      toast.error(error?.message || 'Transaction failed');
+      // Provide more detailed error log for debugging
+      // eslint-disable-next-line no-console
+      console.error('handleAction error', error);
+      const errMsg = error?.message || error?.reason || (error?.data && (error.data.message || JSON.stringify(error.data))) || 'Transaction failed';
+      toast.error(errMsg);
     }
   };
 
@@ -298,28 +324,45 @@ const StakingDashboard: React.FC = () => {
 
             {/* Bottom: Action Button */}
             <div>
-                <button 
-                    onClick={handleAction}
-                  disabled={stakingLoading || !isConnected}
-                    style={{
-                    width: '100%',
-                    padding: '14px',
-                    fontSize: '1rem',
-                    fontWeight: 'bold',
-                    borderRadius: '10px',
-                    border: 'none',
-                    cursor: stakingLoading || !isConnected ? 'not-allowed' : 'pointer',
-                    transition: 'all 0.2s',
-                    background: activeTab === 'stake' 
-                        ? 'linear-gradient(90deg, #2563eb, #06b6d4)' 
-                        : 'linear-gradient(90deg, #ea580c, #dc2626)', 
-                    color: 'white',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                    opacity: stakingLoading || !isConnected ? 0.6 : 1
-                    }}
-                >
-                    {stakingLoading ? 'Processing...' : (activeTab === 'stake' ? 'Confirm Deposit' : 'Confirm Withdraw')}
-                </button>
+              <button
+                onClick={handleAction}
+                disabled={
+                  stakingLoading ||
+                  !isConnected ||
+                  !amount ||
+                  parseFloat(amount) <= 0
+                }
+                style={{
+                  width: '100%',
+                  padding: '14px',
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  borderRadius: '10px',
+                  border: 'none',
+                  cursor:
+                    stakingLoading || !isConnected || !amount || parseFloat(amount) <= 0
+                      ? 'not-allowed'
+                      : 'pointer',
+                  transition: 'all 0.2s',
+                  background:
+                    activeTab === 'stake'
+                      ? 'linear-gradient(90deg, #2563eb, #06b6d4)'
+                      : 'linear-gradient(90deg, #ea580c, #dc2626)',
+                  color: 'white',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                  opacity:
+                    stakingLoading || !isConnected || !amount || parseFloat(amount) <= 0
+                      ? 0.6
+                      : 1,
+                }}
+              >
+                {stakingLoading
+                  ? 'Processing...'
+                  : activeTab === 'stake'
+                  ? 'Confirm Deposit'
+                  : 'Confirm Withdraw'}
+              </button>
+
                 
                 {activeTab === 'unstake' && (
                     <p 
