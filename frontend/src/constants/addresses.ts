@@ -45,9 +45,10 @@ export const getNetworkConfig = (chainId?: number) => {
   
   const networkMap: { [key: number]: keyof typeof CONTRACT_ADDRESSES } = {
     31337: 'localhost',
-    18000: 'iotextest',
+    4690: 'iotextest',
     4689: 'iotexmain'
   };
   
   return CONTRACT_ADDRESSES[networkMap[chainId] || 'localhost'];
 };
+
