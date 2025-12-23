@@ -4,7 +4,6 @@ import WalletLogin from './WalletLogin';
 import './Header.css';
 
 // --- IMPORT ẢNH (QUAN TRỌNG: Cần đúng tên file và phần mở rộng) ---
-// Giả sử file ảnh nằm ở src/assets/Ricoin.png
 import ricoinLogo from '../assets/Ricoin.png'; 
 
 // List of networks
@@ -19,13 +18,14 @@ const NETWORKS = [
   { name: 'ZKSync Era', icon: '⏳', color: '#F0F0F0' },
 ];
 
-// Navigation links
+// Navigation links - Đã thêm 'News'
 const navLinks = [
   { name: 'Trade', href: '/trade' },
   { name: 'MintNFT', href: '/mint' },
   { name: 'Tokens', href: '/tokens' },
   { name: 'Swap', href: '/swap' },
-  { name: 'Marketplace', href: '/nft-marketplace' }
+  { name: 'Marketplace', href: '/nft-marketplace' },
+  { name: 'News', href: '/news', isHot: true } // Thêm cờ isHot để hiện badge
 ];
 
 const Header: React.FC = () => {
@@ -112,8 +112,32 @@ const Header: React.FC = () => {
             const activeClass = isActive ? 'nav-link-highlight' : '';
 
             return (
-              <Link key={link.name} to={link.href} className={`nav-link ${activeClass}`}>
+              <Link 
+                key={link.name} 
+                to={link.href} 
+                className={`nav-link ${activeClass}`}
+                style={{ position: 'relative' }} // Thêm position relative để định vị badge
+              >
                 {link.name}
+                
+                {/* Badge HOT cho News */}
+                {link.isHot && (
+                  <span style={{
+                    position: 'absolute',
+                    top: '-8px',
+                    right: '-12px',
+                    backgroundColor: '#ef4444',
+                    color: 'white',
+                    fontSize: '9px',
+                    fontWeight: 'bold',
+                    padding: '2px 5px',
+                    borderRadius: '99px',
+                    boxShadow: '0 0 5px rgba(239, 68, 68, 0.5)',
+                    animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                  }}>
+                    HOT
+                  </span>
+                )}
               </Link>
             );
           })}
@@ -162,6 +186,14 @@ const Header: React.FC = () => {
           <WalletLogin />
         </div>
       </div>
+      
+      {/* CSS Animation cho badge HOT */}
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: .8; transform: scale(1.05); }
+        }
+      `}</style>
     </header>
   );
 };
